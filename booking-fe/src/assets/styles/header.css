@@ -1,0 +1,260 @@
+.app-header {
+    background-color: #f8f9fa;
+    padding: 16px 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .app-header a {
+    text-decoration: none;
+    color: #343a40;
+    margin-right: 20px;
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+  
+  .app-header a:hover {
+    color: #007bff;
+  }
+  
+  .app-header .brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #212529;
+  }
+  
+  .app-header .user-info {
+    display: inline-block;
+    margin-right: 10px;
+    font-weight: 500;
+  }
+  .app-header {
+    background-color: #ffffff;
+    padding: 16px 24px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .app-header .brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #000000;
+    text-decoration: none;
+  }
+  
+  .app-header nav a {
+    margin-right: 16px;
+    text-decoration: none;
+    color: #000000;
+    font-weight: 500;
+  }
+  
+  .app-header nav a:hover {
+    text-decoration: underline;
+  }
+  
+  .app-header .user-info {
+    margin-right: 12px;
+    font-weight: 500;
+    color: #000000;
+  }
+  
+  .app-header button {
+    font-size: 0.875rem;
+  }
+
+  .nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Đẩy các thành phần sang hai bên */
+  }
+
+  .search-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-right: 20px; /* Tăng khoảng cách giữa nút tìm kiếm và các nút khác */
+  }
+
+  .search-icon {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+  }
+
+  .search-input {
+    display: inline-block;
+    width: 200px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+    font-size: 0.9rem;
+    margin-left: 10px;
+  }
+
+  .search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+
+  .user-actions {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .user-info {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+
+  .user-info:hover {
+    background-color: #f0f0f0;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%; /* Hiển thị ngay dưới user-info */
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 150px;
+  }
+
+  .dropdown-menu a,
+  .dropdown-menu button {
+    font-size: 14px;
+    color: #333;
+    text-decoration: none;
+    padding: 8px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    text-align: left;
+  }
+
+  .dropdown-menu a:hover,
+  .dropdown-menu button:hover {
+    background-color: #f0f0f0;
+  }
+
+  .logout-button {
+    background: none;
+    border: none;
+    color: #d9534f;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .logout-button:hover {
+    background-color: #f8d7da;
+    color: #c9302c;
+  }
+
+  .search-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-right: 20px; /* Tăng khoảng cách giữa nút tìm kiếm và các nút khác */
+  }
+
+  .search-icon {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+  }
+
+  .search-input {
+    display: inline-block;
+    width: 200px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+    font-size: 0.9rem;
+    margin-left: 10px;
+  }
+
+  .search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+
+  .user-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Khoảng cách giữa các nút trong user-actions */
+    position: relative;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%; /* Hiển thị ngay dưới tên/email */
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .dropdown-menu p {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .logout-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .logout-button:hover {
+    text-decoration: underline;
+  }
+
+  .user-info {
+    font-size: 1.5rem;
+  }
+
+  .logout-icon {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  .login-icon {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    font-weight: bold; /* Làm chữ "Đăng nhập" nổi bật hơn */
+  }

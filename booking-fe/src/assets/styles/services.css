@@ -1,0 +1,19 @@
+.booking-button {
+    background: linear-gradient(to right, #4e9ca9);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+  
+  .booking-button:hover {
+    opacity: 0.9;
+  }
+  

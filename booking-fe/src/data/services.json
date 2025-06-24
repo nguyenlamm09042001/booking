@@ -1,0 +1,39 @@
+[
+    {
+      "id": 1,
+      "name": "Cắt tóc nữ",
+      "icon": "💇‍♀️",
+      "description": "Chọn kiểu tóc yêu thích, đặt ngay."
+    },
+    {
+      "id": 2,
+      "name": "Gội đầu dưỡng sinh",
+      "icon": "💆‍♀️",
+      "description": "Thư giãn da đầu, chăm sóc nhẹ nhàng."
+    },
+    {
+      "id": 3,
+      "name": "Đặt xe riêng",
+      "icon": "🚗",
+      "description": "Xe đưa đón tận nơi."
+    },
+    {
+      "id": 4,
+      "name": "Khách sạn 3 sao",
+      "icon": "🏨",
+      "description": "Nghỉ ngơi tiện nghi, giá tốt."
+    },
+    {
+      "id": 5,
+      "name": "Làm móng",
+      "icon": "💅",
+      "description": "Chăm sóc và tạo kiểu móng."
+    },
+    {
+      "id": 6,
+      "name": "Massage body",
+      "icon": "🧖‍♀️",
+      "description": "Giải tỏa căng thẳng, thư giãn toàn thân."
+    }
+  ]
+  

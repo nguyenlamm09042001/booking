@@ -1,0 +1,17 @@
+.booking-submit-btn {
+    background: linear-gradient(135deg, #66a5ad, #c4dfe6);
+    border: none;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+/* .booking-submit-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.2);
+  } */
+  /* .booking-submit-btn:hover {
+    background: linear-gradient(135deg, #004445, #2c7873);
+    box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.2);
+  } */
