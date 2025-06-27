@@ -34,17 +34,28 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-
+    
         if (!Auth::attempt($credentials)) {
             return response()->json(['message' => 'Thông tin đăng nhập không chính xác'], 401);
         }
+    
+        $user = Auth::user(); 
 
-        return response()->json(['message' => 'Đăng nhập thành công']);
+        return response()->json([
+            'message' => 'Đăng nhập thành công',
+            'role' => $user->role, 
+            'user' => $user         
+        ]);
     }
+    
 
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return response()->json(['message' => 'Đăng xuất thành công']);
     }
 

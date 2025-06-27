@@ -9,7 +9,6 @@ const api = axios.create({
   },
 });
 
-// Interceptor để tự động gắn XSRF token từ cookie vào header
 api.interceptors.request.use((config) => {
   const xsrfToken = Cookies.get('XSRF-TOKEN');
   if (xsrfToken) {
@@ -20,7 +19,6 @@ api.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-// Interceptor xử lý lỗi (tùy chọn)
 api.interceptors.response.use(
   response => response,
   error => {

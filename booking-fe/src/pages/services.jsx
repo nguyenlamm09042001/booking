@@ -6,10 +6,9 @@ import '../assets/styles/services.css';
 export default function Services() {
   const [servicesData, setServicesData] = useState([]);
 
-  // 👉 Lấy query param ?type= từ URL
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const selectedType = queryParams.get('type'); // ví dụ: hair, nail, spa
+  const selectedType = queryParams.get('type'); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +29,6 @@ export default function Services() {
     
   return (
     <div className="container my-5">
-      {/* 💼 Danh sách tất cả các cơ sở (hoặc lọc theo type) */}
       <h2>💼 Danh sách các cơ sở</h2>
       <div>
         {filteredBusinesses.length > 0 ? (
@@ -60,7 +58,6 @@ export default function Services() {
         )}
       </div>
 
-      {/* 🎯 Chỉ hiển thị phân loại nếu KHÔNG có selectedType */}
       {!selectedType && (
         <>
           <h2>🎯 Doanh nghiệp theo loại hình</h2>

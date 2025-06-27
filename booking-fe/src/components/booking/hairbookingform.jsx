@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../../assets/styles/bookingform.css';
+import api from '../../axios';
 
 const today = new Date().toISOString().split('T')[0];
 
@@ -28,15 +29,35 @@ export default function SpaBookingForm() {
     setForm({ ...form, time: slot });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Đặt lịch: ${form.name} - ${form.phone} - ${form.style} lúc ${form.time}, ngày ${form.date}`);
-    // API gọi ở đây nếu cần
+    try {
+      const res = await api.post('/appointments', {
+        name: form.name,
+        phone: form.phone,
+        style: form.style,
+        date: form.date,
+        time: form.time,
+      });
+      alert('✅ Đặt lịch thành công!');
+      console.log(res.data);
+
+      setForm({
+        name: '',
+        phone: '',
+        style: 'Cắt',
+        date: today,
+        time: '',
+      });
+    } catch (error) {
+      console.error(error);
+      alert('❌ Có lỗi xảy ra khi đặt lịch.');
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* Họ tên + SĐT */}
+
       <div className="row g-2 mb-3">
         <div className="col-md-6">
           <input
@@ -62,7 +83,6 @@ export default function SpaBookingForm() {
         </div>
       </div>
 
-      {/* Kiểu tóc */}
       <div className="mb-3">
         <select
           name="style"
@@ -77,7 +97,6 @@ export default function SpaBookingForm() {
         </select>
       </div>
 
-      {/* Ngày */}
       <div className="mb-3">
         <input
           type="date"
@@ -89,7 +108,6 @@ export default function SpaBookingForm() {
         />
       </div>
 
-      {/* Khung giờ */}
       <div className="mb-4">
         <label className="form-label fw-semibold">Chọn khung giờ</label>
         <div className="d-flex flex-wrap gap-2">
@@ -108,8 +126,7 @@ export default function SpaBookingForm() {
         </div>
       </div>
 
-      {/* Xác nhận */}
-      <button className="btn w-100 booking-submit-btn">
+      <button type="submit" className="btn w-100 booking-submit-btn">
   💾 Xác nhận đặt lịch
 </button>
     </form>

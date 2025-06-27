@@ -5,15 +5,19 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\AdminController;
 
 
-
-// API login, logout, user info
 Route::middleware('web')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
     Route::get('/user', [AuthController::class, 'user'])->middleware('auth');
 });
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/admin/appointments', [AdminController::class, 'appointments']);
+});
+
 
 Route::post('/register', [AuthController::class, 'register']);
 
@@ -21,3 +25,5 @@ Route::get('/services', [ServiceController::class, 'index']);
 
 Route::get('/businesses', [BusinessController::class, 'index']);
 Route::get('/businesses/{id}', [BusinessController::class, 'show']);
+
+Route::post('/appointments', [AppointmentController::class,'store']);

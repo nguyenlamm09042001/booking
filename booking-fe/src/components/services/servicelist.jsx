@@ -1,9 +1,9 @@
 import React from "react";
-import services from "../../data/services.json"; // nếu bé có file JSON dịch vụ
-import ServiceCard from "./servicecard"; // nếu đã có ServiceCard
+import services from "../../data/services.json"; 
+import ServiceCard from "./servicecard"; 
 
 export default function ServiceList() {
-  // Chỉ hiển thị 6 dịch vụ đầu tiên
+ 
   const featured = services.slice(0, 6);
 
   return (

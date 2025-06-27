@@ -1,0 +1,133 @@
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-header {
+  background-color: white;
+  padding: 20px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.admin-header h1 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.admin-nav a {
+  margin-left: 20px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.admin-nav a:hover {
+  color: #007bff;
+}
+
+.admin-subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.admin-section {
+  margin-bottom: 50px;
+}
+
+.admin-section h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  border-left: 4px solid #007bff;
+  padding-left: 10px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.admin-table th, .admin-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.admin-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.btn-cancel {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-view {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background-color: #c0392b;
+}
+
+.btn-view:hover {
+  background-color: #2980b9;
+}
+
+.btn-approve {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-left: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-approve:hover {
+  background-color: #218838;
+}
+
+.admin-stats {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap; /* Cho responsive mobile */
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  flex: 1 1 200px; /* Cho phép co giãn, min width 200px */
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.stat-card h3 {
+  font-size: 24px;
+  margin: 0 0 10px;
+}
+
+.stat-card p {
+  margin: 0;
+  color: #666;
+}

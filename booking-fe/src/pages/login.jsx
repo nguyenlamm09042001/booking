@@ -4,6 +4,7 @@ import firebase from '../firbase/firebase';
 import api from '../axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle, faFacebook } from '@fortawesome/free-brands-svg-icons';
+import axios from 'axios';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -13,31 +14,40 @@ export default function Login() {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Ngăn form reload trang
+    e.preventDefault(); 
     try {
-      // Bắt buộc: Gọi CSRF cookie trước
-      await api.get('/sanctum/csrf-cookie');
-  
-      // Sau đó mới gọi login
-      const res = await api.post('/login', {
-        email: email,
-        password: password
+      // B1: Lấy CSRF token
+      await axios.get('http://localhost:8000/sanctum/csrf-cookie', {
+        withCredentials: true
       });
-  
+    
+      // B2: Gửi yêu cầu login
+      const res = await api.post('/login', {
+        email,
+        password
+      });
+    
       console.log('Đăng nhập thành công:', res.data);
       setSuccessMessage('Đăng nhập thành công!');
       setError('');
-      navigate('/'); // Chuyển hướng sau khi đăng nhập thành công
+    
+      const role = res.data.role;
+      if (role === 'admin') {
+        navigate('/admin/dashboard');
+      } else if (role === 'staff') {
+        navigate('/staff/dashboard');
+      } else {
+        navigate('/'); 
+      }
+    
     } catch (error) {
-
-      // console.error('Lỗi đăng nhập:', error.response);
-
       if (error.response?.data?.message) {
         setError(error.response.data.message);
       } else {
         setError('Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.');
       }
-    }};
+    }
+  }
 
   const handleGoogleLogin = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();

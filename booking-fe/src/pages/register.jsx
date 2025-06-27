@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../axios'; // Import axios từ file cấu hình
+import api from '../axios';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -20,7 +20,7 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(''); // Xóa lỗi trước đó
+        setError(''); 
 
         if (formData.password !== formData.confirmPassword) {
             setError('Mật khẩu không khớp!');
@@ -32,16 +32,16 @@ const Register = () => {
                 username: formData.username,
                 email: formData.email,
                 password: formData.password,
-                password_confirmation: formData.confirmPassword, // <- phải là password_confirmation
+                password_confirmation: formData.confirmPassword, 
             },{
                 maxRedirects: 0
             });
 
-            // Kiểm tra và hiển thị thông báo thành công
+         
             const successMessage = response.data.message || 'Đăng ký thành công!';
             alert(successMessage);
 
-            // Chuyển hướng đến trang đăng nhập
+          
             navigate('/login');
         } catch (error) {
             if (error.response && error.response.data.errors) {

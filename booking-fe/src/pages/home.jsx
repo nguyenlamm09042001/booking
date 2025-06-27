@@ -2,7 +2,7 @@ import React from 'react';
 import WhyChooseUs from '../components/home/whychooseus.jsx';
 import HowToBook from '../components/home/howtobook';
 import Hero from '../components/home/hero';
-import Service from '../components/services/servicelist'; // phần nổi bật
+import Service from '../components/services/servicelist'; 
 import QuickPurpose from '../components/home/quickpurpose';
 import ServiceCategories from '../components/home/servicecategories';
 import Testimonials from '../components/home/testimonials';
@@ -12,12 +12,12 @@ export default function Home() {
   return (
     <div className="container mt-4">
       <Hero />
-      <SearchBar /> {/* 👈 nằm dính ngay dưới ảnh Hero */}
+      <SearchBar /> 
       <QuickPurpose />
-      <ServiceCategories />     {/* 👈 Thêm chỗ này */}
+      <ServiceCategories />    
       <Service />
       <WhyChooseUs />
-      <Testimonials />         {/* 👈 Và chỗ này */}
+      <Testimonials />       
       <HowToBook />
     </div>
   );
