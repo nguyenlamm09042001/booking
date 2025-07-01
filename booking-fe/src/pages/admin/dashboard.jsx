@@ -28,19 +28,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="admin-container">
-      
       {/* ========== Admin Header ========== */}
-      <header className="admin-header">
-        <h1>Admin Panel</h1>
-        <nav className="admin-nav">
-          <a href="/admin/dashboard">Dashboard</a>
-          <a href="/admin/businesses">Doanh nghiệp</a>
-          <a href="/admin/users">Người dùng</a>
-          <a href="/admin/services">Dịch vụ</a>
-          <a href="/admin/feedbacks">Feedback</a>
-          <a href="/logout">Đăng xuất</a>
-        </nav>
-      </header>
 
       <p className="admin-subtitle">Tổng quan hệ thống Booking App</p>
 

@@ -1,13 +1,14 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import AdminHeader from '../components/layout/adminheader';
 
-function AdminLayout() {
+const AdminLayout = () => {
   return (
-    <>
-      {/* Nếu admin có navbar riêng, import ở đây */}
+    <div>
+      <AdminHeader />
       <Outlet />
-    </>
+    </div>
   );
-}
+};
 
 export default AdminLayout;
