@@ -6,28 +6,42 @@
 }
 
 .admin-header {
-  background-color: white;
-  padding: 20px;
+  background-color: #fff;
+  padding: 15px 30px;
   border-bottom: 1px solid #ddd;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .admin-header h1 {
-  font-size: 24px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #007bff; /* màu chủ đạo thương hiệu */
   margin: 0;
 }
 
+.admin-nav {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 .admin-nav a {
-  margin-left: 20px;
   color: #333;
   text-decoration: none;
   font-weight: 500;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .admin-nav a:hover {
+  background-color: #f0f0f0;
   color: #007bff;
 }
 
@@ -130,4 +144,29 @@
 .stat-card p {
   margin: 0;
   color: #666;
+}
+
+.admin-header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+
+.logout-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #c0392b;
 }

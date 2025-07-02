@@ -1,0 +1,145 @@
+.business-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 30px 20px;
+}
+
+.business-main h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  border-left: 4px solid #28a745;
+  padding-left: 10px;
+}
+
+.business-main p {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.business-banner {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.business-stats {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  flex: 1 1 200px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.stat-card h3 {
+  font-size: 24px;
+  margin: 0 0 10px;
+  color: #28a745;
+}
+
+.stat-card p {
+  margin: 0;
+  color: #555;
+  font-weight: 500;
+}
+
+.business-section {
+  margin-top: 40px;
+}
+
+.business-section h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  border-left: 4px solid #28a745;
+  padding-left: 10px;
+}
+
+.business-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.business-table th, .business-table td {
+  border: 1px solid #ddd;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.business-table th {
+  background-color: #f0f0f0;
+  font-weight: 600;
+}
+
+.business-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+
+.business-header {
+  background-color: white;
+  padding: 15px 30px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.business-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #28a745; /* xanh brand business */
+  margin: 0;
+}
+
+.business-nav {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.business-nav a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.business-nav a:hover {
+  background-color: #f0f0f0;
+  color: #28a745;
+}
+
+.business-logout-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.business-logout-button:hover {
+  background-color: #c0392b;
+}

@@ -32,13 +32,14 @@ export default function Login() {
       setError('');
     
       const role = res.data.role;
-      if (role === 'admin') {
-        navigate('/admin/dashboard');
-      } else if (role === 'staff') {
-        navigate('/staff/dashboard');
-      } else {
-        navigate('/'); 
-      }
+
+      const dashboards = {
+        admin: '/admin/dashboard',
+        staff: '/staff/dashboard',
+        business: '/business/dashboard',
+      };
+      
+      navigate(dashboards[role] || '/');
     
     } catch (error) {
       if (error.response?.data?.message) {

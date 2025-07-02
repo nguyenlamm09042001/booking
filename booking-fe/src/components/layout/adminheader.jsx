@@ -2,7 +2,7 @@ import React from 'react';
 import '../../assets/styles/admin.css';
 import axios from 'axios';
 import api from '../../axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function AdminHeader() {
   const navigate = useNavigate();
@@ -13,8 +13,6 @@ export default function AdminHeader() {
         withCredentials: true,
       });
       await api.post('/logout');
-
-      // setUser(null); // xóa dòng này nếu không có useState user ở đây
       navigate('/login');
     } catch (error) {
       console.error('Logout failed:', error);
@@ -23,15 +21,17 @@ export default function AdminHeader() {
 
   return (
     <header className="admin-header">
-      <h1>Admin Panel</h1>
+      <div className="admin-header-left">
+        <h1>✨ Admin Panel</h1>
+      </div>
       <nav className="admin-nav">
-        <a href="/admin/dashboard">Dashboard</a>
-        <a href="/admin/business">Doanh nghiệp</a>
-        <a href="/admin/user">Người dùng</a>
-        <a href="/admin/service">Dịch vụ</a>
-        <a href="/admin/feedback">Feedback</a>
+        <Link to="/admin/dashboard">🏠 Dashboard</Link>
+        <Link to="/admin/business">🏢 Doanh nghiệp</Link>
+        <Link to="/admin/user">👤 Người dùng</Link>
+        <Link to="/admin/service">🛠 Dịch vụ</Link>
+        <Link to="/admin/feedback">💬 Feedback</Link>
         <button onClick={handleLogout} className="logout-button">
-          Đăng xuất
+          🚪 Đăng xuất
         </button>
       </nav>
     </header>
