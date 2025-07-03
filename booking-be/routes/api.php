@@ -23,7 +23,7 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::get('admin/services', [ServiceController::class, 'index']);
 
-Route::get('admin/businesses', [BusinessController::class, 'index']);
+Route::get('businesses', [BusinessController::class, 'index']);
 Route::get('/businesses/{id}', [BusinessController::class, 'show']);
 
 Route::post('/appointments', [AppointmentController::class,'store']);

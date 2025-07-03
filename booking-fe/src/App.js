@@ -11,8 +11,14 @@ import AdminBusiness from './pages/admin/business';
 import AdminFeeback from './pages/admin/feedback';
 import AdminService from './pages/admin/service';
 import AdminUser from './pages/admin/user';
+
 import BusinessDashboard from './pages/business/dashboard';
+import BusinessService from './pages/business/service';
+import BusinessBooking from './pages/business/booking';
+import BusinessFeedback from './pages/business/feedback';
+
 import CustomerLayout from './layouts/user';
+
 import AdminLayout from './layouts/admin';
 import BusinessLayout from './layouts/business';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -35,15 +41,15 @@ function App() {
           <Route path="business" element={<AdminBusiness />} />
           <Route path="feedback" element={<AdminFeeback />} />
           <Route path="service" element={<AdminService />} />
-          <Route path="user" element={<AdminUser />} />=
+          <Route path="user" element={<AdminUser />} />
         </Route>
 
          <Route path="/business" element={<BusinessLayout />}>
           <Route path="dashboard" element={<BusinessDashboard />} />
-          {/* <Route path="business" element={<BusinessBusiness />} />
-          <Route path="feedback" element={<BusinessFeeback />} />
           <Route path="service" element={<BusinessService />} />
-          <Route path="user" element={<BusinessUser />} />= */}
+          <Route path="booking" element={<BusinessBooking />} />
+          <Route path="feedback" element={<BusinessFeedback />} />
+
         </Route>
 
 

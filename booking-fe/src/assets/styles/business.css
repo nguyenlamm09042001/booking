@@ -143,3 +143,345 @@
 .business-logout-button:hover {
   background-color: #c0392b;
 }
+
+
+/* 🔥 Stat card màu tím cho doanh thu */
+.stat-purple {
+  background-color: #f3e5f5; /* light purple */
+  border-color: #ce93d8;     /* medium purple */
+}
+
+.stat-purple h3 {
+  color: #9c27b0; /* brand purple */
+}
+
+/* 🔥 Style list feedback mới */
+.feedback-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feedback-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+  color: #555;
+}
+
+.feedback-list li:last-child {
+  border-bottom: none;
+}
+
+
+
+/* 🔥 Action buttons trong table */
+.action-button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.action-button.edit {
+  background-color: #f1c40f;
+  color: white;
+}
+
+.action-button.edit:hover {
+  background-color: #d4ac0d;
+}
+
+.action-button.delete {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.action-button.delete:hover {
+  background-color: #c0392b;
+}
+
+/* 🔥 Button thêm dịch vụ mới */
+.add-service-button-container {
+  margin-top: 30px;
+  text-align: right;
+}
+
+.add-service-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.add-service-button:hover {
+  background-color: #218838;
+}
+
+
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Màu nền mờ đậm hơn */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeInOverlay 0.3s ease-in-out; /* Hiệu ứng fade-in */
+}
+
+/* Modal content */
+.modal-content {
+  background-color: #ffffff !important; /* Màu nền đỏ nổi bật */
+  padding: 40px;
+  border-radius: 16px; /* Góc bo tròn lớn hơn */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Hiệu ứng đổ bóng mạnh hơn */
+  width: 90%;
+  max-width: 600px;
+  animation: scaleUp 0.3s ease-in-out; /* Hiệu ứng scale-up */
+  position: relative;
+  border: 2px solid #28a745; /* Viền nổi bật */
+}
+
+/* Modal heading */
+.modal-content h2 {
+  margin-top: 0;
+  font-size: 2.2rem; /* Kích thước chữ lớn hơn */
+  color: #28a745; /* Màu xanh thương hiệu */
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 25px; /* Khoảng cách giữa tiêu đề và nội dung */
+}
+
+/* Form styles */
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Khoảng cách giữa các phần tử */
+}
+
+.modal-content form label {
+  font-weight: bold;
+  color: #000000;
+  margin-bottom: 8px; /* Khoảng cách giữa nhãn và trường nhập liệu */
+}
+
+.modal-content form input,
+.modal-content form textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modal-content form input:focus,
+.modal-content form textarea:focus {
+  border-color: #28a745; /* Màu viền khi focus */
+  box-shadow: 0 0 8px rgba(40, 167, 69, 0.5); /* Hiệu ứng ánh sáng khi focus */
+  outline: none;
+}
+
+.modal-content form textarea {
+  resize: none;
+  height: 140px; /* Chiều cao cố định cho textarea */
+}
+
+/* Modal actions */
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px; /* Khoảng cách giữa các nút */
+}
+
+.modal-actions .add-service-button {
+  background-color: #3ec3d4; /* Màu xanh lá */
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.modal-actions .add-service-button:hover {
+  background-color: #178391; /* Màu xanh lá đậm hơn khi hover */
+  transform: scale(1.05); /* Hiệu ứng phóng to nhẹ khi hover */
+}
+
+.modal-actions .action-button.delete {
+  background-color: #e74c3c; /* Màu đỏ */
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.modal-actions .action-button.delete:hover {
+  background-color: #c0392b; /* Màu đỏ đậm hơn khi hover */
+  transform: scale(1.05); /* Hiệu ứng phóng to nhẹ khi hover */
+}
+
+/* Close button */
+.modal-content .close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.modal-content .close-button:hover {
+  color: #e74c3c; /* Màu đỏ khi hover */
+  transform: scale(1.2); /* Hiệu ứng phóng to nhẹ khi hover */
+}
+
+/* Fade-in animation */
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Scale-up animation */
+@keyframes scaleUp {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.booking-date-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* 🔥 Booking filters */
+.booking-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* khoảng cách giữa các group */
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+
+.booking-filters select {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.95rem;
+}
+
+
+.booking-filters label {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-group label {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.filter-group input[type="date"],
+.filter-group select {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.95rem;
+}
+
+
+/* 🔥 Status badge */
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status-confirmed {
+  background-color: #28a745;
+  color: white;
+}
+
+.status-pending {
+  background-color: #ffc107;
+  color: #333;
+}
+
+/* 🔥 Pagination */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* 🔥 Modal close button */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}

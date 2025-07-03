@@ -26,8 +26,8 @@ export default function BusinessHeader() {
       </div>
       <nav className="business-nav">
         <Link to="/business/dashboard">🏠 Dashboard</Link>
-        <Link to="/business/services">🛠 Dịch vụ</Link>
-        <Link to="/business/bookings">📅 Lịch hẹn</Link>
+        <Link to="/business/service">🛠 Dịch vụ</Link>
+        <Link to="/business/booking">📅 Lịch hẹn</Link>
         <Link to="/business/feedback">💬 Feedback</Link>
         <button onClick={handleLogout} className="business-logout-button">
           🚪 Đăng xuất

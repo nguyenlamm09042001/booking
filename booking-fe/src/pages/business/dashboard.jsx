@@ -11,10 +11,14 @@ export default function BusinessDashboard() {
         </div>
 
         <h2>👋 Chào mừng đến Business Dashboard</h2>
-        <p>Đây là nơi quản lý dịch vụ, lịch hẹn và phản hồi của doanh nghiệp bạn.</p>
+        <p>Đây là nơi quản lý dịch vụ, lịch hẹn, phản hồi và doanh thu của doanh nghiệp bạn.</p>
 
         {/* 🔥 Thống kê nhanh */}
         <div className="business-stats">
+          <div className="stat-card stat-purple">
+              <h3>2.000.000đ</h3>
+              <p>💰 Doanh thu hôm nay</p>
+          </div> 
           <div className="stat-card stat-blue">
             <h3>12</h3>
             <p>🛠 Dịch vụ</p>
@@ -27,6 +31,7 @@ export default function BusinessDashboard() {
             <h3>5</h3>
             <p>💬 Feedback mới</p>
           </div>
+         
         </div>
 
         {/* 🔥 Bảng dịch vụ mới nhất */}
@@ -80,6 +85,17 @@ export default function BusinessDashboard() {
             </tbody>
           </table>
         </section>
+
+        {/* 🔥 Feedback mới nhất */}
+        <section className="business-section">
+          <h2>Feedback mới</h2>
+          <ul className="feedback-list">
+            <li>Nguyễn Văn C: Dịch vụ tốt, sẽ quay lại.</li>
+            <li>Trần Thị D: Nhân viên thân thiện, dễ thương.</li>
+            <li>Lê Văn E: Không gian sạch sẽ, mát mẻ.</li>
+          </ul>
+        </section>
+
       </main>
     </div>
   );
