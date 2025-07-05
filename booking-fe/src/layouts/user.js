@@ -1,14 +1,18 @@
 import React from 'react';
 import Header from '../components/layout/header';
 import { Outlet } from 'react-router-dom';
+import Footer from '../components/layout/footer';
 
-function CustomerLayout() {
+function UserLayout() {
   return (
-    <>
+    <div className="app-wrapper">
       <Header />
-      <Outlet />
-    </>
+      <main>
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
   );
 }
 
-export default CustomerLayout;
+export default UserLayout;

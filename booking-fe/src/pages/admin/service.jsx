@@ -7,7 +7,7 @@ const AdminService = () => {
 
   useEffect(() => {
     // 👉 Gọi API lấy danh sách dịch vụ
-    api.get('/services')
+    api.get('admin/services')
       .then(res => setServices(res.data))
       .catch(err => console.error(err));
   }, []);
@@ -25,10 +25,7 @@ const AdminService = () => {
             <h3>{services.length}</h3>
             <p>Tổng dịch vụ</p>
           </div>
-          <div className="stat-card">
-            <h3>{services.filter(s => s.status === 'active').length}</h3>
-            <p>Đang hoạt động</p>
-          </div>
+       
           <div className="stat-card">
             <h3>{services.filter(s => s.status === 'pending').length}</h3>
             <p>Chờ duyệt</p>
@@ -67,8 +64,8 @@ const AdminService = () => {
                 <tr key={s.id}>
                   <td>{index + 1}</td>
                   <td>{s.name}</td>
-                  <td>{s.business_name}</td>
-                  <td>{s.price} đ</td>
+                  <td>{s.business?.name || 'Chưa có business'}</td>
+                  <td>{Number(s.price).toLocaleString('vi-VN')} vnd</td>
                   <td>{s.duration} phút</td>
                   <td>{s.status}</td>
                   <td>{s.created_at}</td>

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Appointment;
 
 class Business extends Authenticatable
 {
@@ -15,4 +16,26 @@ class Business extends Authenticatable
     {
         return $this->hasMany(Service::class);
     }
+    
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+    
+    public function staff()
+    {
+        return $this->hasMany(Staff::class);
+    }
+    
+    public function customers()
+    {
+        return $this->hasMany(Customer::class);
+    }
+    
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+    
+
 }

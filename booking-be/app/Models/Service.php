@@ -8,12 +8,16 @@ use App\Models\Business;
 
 class Service extends Model
 {
-    protected $fillable = [
-        'business_id', 'name', 'description', 'price', 'duration', 'image'
-    ];
+    protected $fillable = ['name', 'business_id', 'price', 'duration', 'status'];
 
     public function business()
     {
         return $this->belongsTo(Business::class);
     }
+    
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+    
 }

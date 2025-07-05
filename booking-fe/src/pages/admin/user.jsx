@@ -7,7 +7,7 @@ export default function AdminUser() {
 
   useEffect(() => {
     // 👉 Gọi API lấy danh sách người dùng
-    api.get('/users')
+    api.get('admin/users')
       .then(res => setUsers(res.data))
       .catch(err => console.error(err));
   }, []);
@@ -25,14 +25,7 @@ export default function AdminUser() {
             <h3>{users.length}</h3>
             <p>Tổng người dùng</p>
           </div>
-          <div className="stat-card">
-            <h3>{users.filter(u => u.role === 'business').length}</h3>
-            <p>Chủ doanh nghiệp</p>
-          </div>
-          <div className="stat-card">
-            <h3>{users.filter(u => u.role === 'customer').length}</h3>
-            <p>Khách hàng</p>
-          </div>
+    
         </div>
       </div>
 

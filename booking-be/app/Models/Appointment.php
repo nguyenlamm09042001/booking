@@ -10,12 +10,10 @@ class Appointment extends Model
         'business_id', 'user_id', 'service_id', 'staff_id',
         'date', 'time_start', 'status', 'notes'
     ];
-
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
     public function service()
     {
         return $this->belongsTo(Service::class);
@@ -25,9 +23,6 @@ class Appointment extends Model
     {
         return $this->belongsTo(Business::class);
     }
-
-    
-
     public function staff()
     {
         return $this->belongsTo(User::class, 'staff_id');

@@ -17,7 +17,7 @@ import BusinessService from './pages/business/service';
 import BusinessBooking from './pages/business/booking';
 import BusinessFeedback from './pages/business/feedback';
 
-import CustomerLayout from './layouts/user';
+import UserLayout from './layouts/user';
 
 import AdminLayout from './layouts/admin';
 import BusinessLayout from './layouts/business';
@@ -28,7 +28,7 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        <Route element={<CustomerLayout />}>
+        <Route element={<UserLayout />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Home />} />

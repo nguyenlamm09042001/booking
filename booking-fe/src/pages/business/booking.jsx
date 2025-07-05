@@ -1,53 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../assets/styles/business.css';
+import api from '../../axios';
 
 export default function BookingManagement() {
-  const [selectedDate, setSelectedDate] = useState('2025-07-03');
+  const [selectedDate, setSelectedDate] = useState('2025-06-26');
   const [selectedService, setSelectedService] = useState('Tất cả');
   const [selectedStatus, setSelectedStatus] = useState('Tất cả');
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
-
-  const bookings = [
-    {
-      id: 1,
-      customer: 'Nguyễn Văn A',
-      service: 'Cắt tóc nam',
-      date: '2025-07-03',
-      time: '09:00',
-      status: 'Đã xác nhận',
-      phone: '0909123456',
-      note: 'Khách quen, cắt nhanh',
-    },
-    {
-      id: 2,
-      customer: 'Trần Thị B',
-      service: 'Gội đầu dưỡng sinh',
-      date: '2025-07-03',
-      time: '10:30',
-      status: 'Chờ xác nhận',
-      phone: '0912345678',
-      note: 'Muốn thêm massage vai',
-    },
-    {
-      id: 3,
-      customer: 'Lê Văn C',
-      service: 'Massage đầu',
-      date: '2025-07-04',
-      time: '14:00',
-      status: 'Chờ xác nhận',
-      phone: '0987654321',
-      note: '',
-    },
-  ];
+  const [bookings, setBookings] = useState([]);
+  const user = JSON.parse(localStorage.getItem('user'));
+  const businessId = user ? (user.business_id || user.id) : null;
+  console.log('User from localStorage:', user);
+  console.log('Business ID:', user ? (user.business_id || user.id) : null);
+  
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        if (!businessId) return; // nếu chưa có id, không gọi
+        const res = await api.get(`/businesses/${businessId}/appointments`);
+        setBookings(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+  
+    fetchBookings();
+  }, [businessId]);
+  
+  
 
   // Filter by date, service, status
   const filteredBookings = bookings.filter(b =>
     b.date === selectedDate &&
-    (selectedService === 'Tất cả' || b.service === selectedService) &&
+    (selectedService === 'Tất cả' || (b.notes && b.notes.includes(selectedService))) &&
     (selectedStatus === 'Tất cả' || b.status === selectedStatus)
   );
+  
 
   // Pagination
   const itemsPerPage = 5;
@@ -70,6 +60,8 @@ export default function BookingManagement() {
     <div className="business-container">
       <main className="business-main">
         <h2>📅 Quản lý lịch đặt</h2>
+        <p>Business ID: {businessId}</p>
+
         <p>Xem và quản lý lịch đặt của khách hàng theo ngày.</p>
 
         {/* 🔥 Filter tổng */}
@@ -121,10 +113,10 @@ export default function BookingManagement() {
               <tbody>
                 {currentBookings.map(b => (
                   <tr key={b.id}>
-                    <td>{b.customer}</td>
-                    <td>{b.service}</td>
+                    <td>{b.user ? b.user.name : ''}</td>
+                    <td>{b.notes || ''}</td>
                     <td>{b.date.split('-').reverse().join('/')}</td>
-                    <td>{b.time}</td>
+                    <td>{b.time_start}</td>
                     <td>
                       <span className={`status-badge ${b.status === 'Đã xác nhận' ? 'status-confirmed' : 'status-pending'}`}>
                         {b.status}
@@ -159,11 +151,10 @@ export default function BookingManagement() {
             <div className="modal-content">
               <button className="close-button" onClick={handleCloseModal}>×</button>
               <h2>Chi tiết booking</h2>
-              <p><strong>Khách hàng:</strong> {selectedBooking.customer}</p>
-              <p><strong>Số điện thoại:</strong> {selectedBooking.phone}</p>
-              <p><strong>Dịch vụ:</strong> {selectedBooking.service}</p>
+              {/* <p><strong>Khách hàng:</strong> {selectedBooking.customer}</p> */}
+              <p><strong>Số điện thoại:</strong> {selectedBooking.user ? selectedBooking.user.phone : ''}</p>
               <p><strong>Ngày:</strong> {selectedBooking.date.split('-').reverse().join('/')}</p>
-              <p><strong>Giờ:</strong> {selectedBooking.time}</p>
+              <p><strong>Giờ:</strong> {selectedBooking.time_start}</p>
               <p><strong>Trạng thái:</strong> {selectedBooking.status}</p>
               <p><strong>Ghi chú:</strong> {selectedBooking.note || 'Không có'}</p>
             </div>

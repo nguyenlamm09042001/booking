@@ -26,13 +26,21 @@ export default function Login() {
         email,
         password
       });
-    
-      console.log('Đăng nhập thành công:', res.data);
+  
+      // B3: Lưu token
+      localStorage.setItem('token', res.data.token);
+      api.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+  
+      // B4: Gọi API lấy user info
+      const userRes = await api.get('/user');
+      localStorage.setItem('user', JSON.stringify(userRes.data));
+  
+      console.log('Đăng nhập thành công:', userRes.data);
       setSuccessMessage('Đăng nhập thành công!');
       setError('');
     
-      const role = res.data.role;
-
+      const role = userRes.data.role; // lấy từ user, không lấy từ res.data
+  
       const dashboards = {
         admin: '/admin/dashboard',
         staff: '/staff/dashboard',
@@ -49,6 +57,7 @@ export default function Login() {
       }
     }
   }
+  
 
   const handleGoogleLogin = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();

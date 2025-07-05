@@ -9,7 +9,7 @@ class ServiceController extends Controller
 {
     public function index()
     {
-        $services = Service::all();
-        return response()->json($services); // nếu bé dùng API cho React
+        $services = Service::with('business')->get();
+        return response()->json($services); 
     }
 }
