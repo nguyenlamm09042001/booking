@@ -16,20 +16,23 @@ class AuthController extends Controller
             'username' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'role' => 'required|in:user,business', // validate role
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-
+    
         $user = User::create([
             'name' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role, 
         ]);
-
+    
         return response()->json(['message' => 'Đăng ký thành công!'], 201);
     }
+    
 
     public function login(Request $request)
     {
@@ -40,13 +43,23 @@ class AuthController extends Controller
         }
     
         $user = Auth::user(); 
-
+    
+        // Lấy business_id nếu user là business owner
+        $business = $user->businesses->first();
+        $business_id = $business ? $business->id : null;
+    
         return response()->json([
             'message' => 'Đăng nhập thành công',
-            'role' => $user->role, 
-            'user' => $user         
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+                'business_id' => $business_id,
+            ]
         ]);
     }
+    
     
 
     public function logout(Request $request)
@@ -62,7 +75,15 @@ class AuthController extends Controller
     public function user(Request $request)
     {
         $user = User::find($request->user()->id);
-        return response()->json($user);
+        $business = $user->businesses()->first();
+    
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+            'business_id' => $business?->id,
+        ]);
     }
     
 }

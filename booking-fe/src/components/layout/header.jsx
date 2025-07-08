@@ -1,30 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../../assets/styles/header.css';
 import api from '../../axios';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; // cần import riêng axios gốc
 
-export default function Header({ onLogout }) {
+export default function Header() {
   const [user, setUser] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/user', {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json'
+    // 1. Load nhanh từ localStorage
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    setUser(storedUser);
+
+    // 2. Sync với backend để đảm bảo user thật
+    const fetchUser = async () => {
+      try {
+        const res = await api.get('/user');
+        setUser(res.data);
+        localStorage.setItem('user', JSON.stringify(res.data));
+      } catch (err) {
+        console.log('Not authenticated');
+        setUser(null);
+        localStorage.removeItem('user');
       }
-    })
-      .then((response) => {
-        if (response.ok) return response.json();
-        throw new Error('Not authenticated');
-      })
-      .then((data) => setUser(data))
-      .catch(() => setUser(null));
+    };
+
+    fetchUser();
   }, []);
 
   // ⛔ Auto ẩn dropdown khi click ra ngoài
@@ -46,14 +49,8 @@ export default function Header({ onLogout }) {
 
   const handleLogout = async () => {
     try {
-      // 👉 gọi đúng route (không qua /api)
-      await axios.get('http://localhost:8000/sanctum/csrf-cookie', {
-        withCredentials: true,
-      });
-  
-      // 👉 gọi API logout qua axios có baseURL /api
       await api.post('/logout');
-  
+      localStorage.removeItem('user');
       setUser(null);
       navigate('/login');
     } catch (error) {
@@ -61,9 +58,12 @@ export default function Header({ onLogout }) {
     }
   };
 
+  const role = user?.role;
+
   return (
     <header className="app-header">
       <Link to="/" className="brand">BookingApp</Link>
+
       <nav className="nav-container">
         <div className="search-container">
           {!showSearch && (
@@ -82,27 +82,38 @@ export default function Header({ onLogout }) {
         </div>
 
         {user ? (
-          <div className="user-actions">
-            <span
-              className="user-info"
-              title={user.displayName || user.email}
-              onClick={() => setShowDropdown((prev) => !prev)}
-              style={{ cursor: 'pointer' }}
-            >
-              Xin chào, {user.displayName || user.email} ⏷
-            </span>
-
-            {showDropdown && (
-              <div className={`dropdown-menu ${showDropdown ? 'show' : ''}`}>
-                <Link to="/profile" className="profile-icon" title="Thông tin">
-                  Thông tin
-                </Link>
-                <button onClick={handleLogout} className="logout-button">
-                  Đăng xuất
-                </button>
-              </div>
+          <>
+            {/* Hiển thị menu theo role */}
+            {role === 'business' && (
+              <Link to="/business/dashboard" className="nav-link">Dashboard Business</Link>
             )}
-          </div>
+
+            {role !== 'business' && (
+              <Link to="/appointments" className="nav-link">Lịch hẹn</Link>
+            )}
+
+            <div className="user-actions">
+              <span
+                className="user-info"
+                title={user.name || user.email}
+                onClick={() => setShowDropdown((prev) => !prev)}
+                style={{ cursor: 'pointer' }}
+              >
+                Xin chào, {user.name || user.email} ⏷
+              </span>
+
+              {showDropdown && (
+                <div className={`dropdown-menu ${showDropdown ? 'show' : ''}`}>
+                  <Link to="/profile" className="profile-icon" title="Thông tin">
+                    Thông tin
+                  </Link>
+                  <button onClick={handleLogout} className="logout-button">
+                    Đăng xuất
+                  </button>
+                </div>
+              )}
+            </div>
+          </>
         ) : (
           <Link to="/login" className="login-icon" title="Đăng nhập">
             Đăng nhập

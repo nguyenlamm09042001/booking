@@ -5,6 +5,7 @@ import api from '../axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle, faFacebook } from '@fortawesome/free-brands-svg-icons';
 import axios from 'axios';
+import { successAlert, errorAlert } from '../utils/swal';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -16,30 +17,21 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault(); 
     try {
-      // B1: Lấy CSRF token
-      await axios.get('http://localhost:8000/sanctum/csrf-cookie', {
-        withCredentials: true
-      });
-    
-      // B2: Gửi yêu cầu login
-      const res = await api.post('/login', {
-        email,
-        password
-      });
+      await axios.get('http://localhost:8000/sanctum/csrf-cookie', { withCredentials: true });
   
-      // B3: Lưu token
+      const res = await api.post('/login', { email, password });
+  
       localStorage.setItem('token', res.data.token);
       api.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
   
-      // B4: Gọi API lấy user info
-      const userRes = await api.get('/user');
-      localStorage.setItem('user', JSON.stringify(userRes.data));
+      // ✅ Lưu user từ res.data.user thay vì gọi lại /user
+      const user = res.data.user;
+      localStorage.setItem('user', JSON.stringify(user));
   
-      console.log('Đăng nhập thành công:', userRes.data);
-      setSuccessMessage('Đăng nhập thành công!');
+      successAlert('Đăng nhập thành công!');
       setError('');
-    
-      const role = userRes.data.role; // lấy từ user, không lấy từ res.data
+  
+      const role = user.role;
   
       const dashboards = {
         admin: '/admin/dashboard',
@@ -47,23 +39,26 @@ export default function Login() {
         business: '/business/dashboard',
       };
       
-      navigate(dashboards[role] || '/');
-    
+      successAlert('Đăng nhập thành công!').then(() => {
+        navigate(dashboards[role] || '/');
+      });
+  
     } catch (error) {
       if (error.response?.data?.message) {
         setError(error.response.data.message);
       } else {
-        setError('Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.');
+        errorAlert('Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.');
       }
     }
   }
+  
   
 
   const handleGoogleLogin = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     try {
       await firebase.auth().signInWithPopup(provider);
-      setSuccessMessage('Đăng nhập bằng Google thành công!');
+      successAlert('Đăng nhập bằng Google thành công!');
       setError('');
       navigate('/');
     } catch (error) {
@@ -77,7 +72,7 @@ export default function Login() {
     const provider = new firebase.auth.FacebookAuthProvider();
     try {
       await firebase.auth().signInWithPopup(provider);
-      setSuccessMessage('Đăng nhập bằng Facebook thành công!');
+      successAlert('Đăng nhập bằng Facebook thành công!');
       setError('');
       navigate('/');
     } catch (error) {

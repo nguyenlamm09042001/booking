@@ -1,10 +1,15 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+
 import Login from './pages/login';
 import Register from './pages/register';
 import Home from './pages/home';
 import Services from './pages/services';
 import BookingForm from './pages/bookingform';
+import Appointment from './pages/appointment';
+import Profile from './pages/profile';
 
 import AdminDashboard from './pages/admin/dashboard';
 import AdminBusiness from './pages/admin/business';
@@ -18,7 +23,6 @@ import BusinessBooking from './pages/business/booking';
 import BusinessFeedback from './pages/business/feedback';
 
 import UserLayout from './layouts/user';
-
 import AdminLayout from './layouts/admin';
 import BusinessLayout from './layouts/business';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -26,14 +30,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
+      <ToastContainer />
 
+      <Routes>
         <Route element={<UserLayout />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Home />} />
           <Route path="/services" element={<Services />} />
           <Route path="/booking/:id" element={<BookingForm />} />
+          <Route path="/appointments" element={<Appointment />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
 
         <Route path="/admin" element={<AdminLayout />}>
@@ -44,16 +51,12 @@ function App() {
           <Route path="user" element={<AdminUser />} />
         </Route>
 
-         <Route path="/business" element={<BusinessLayout />}>
+        <Route path="/business" element={<BusinessLayout />}>
           <Route path="dashboard" element={<BusinessDashboard />} />
           <Route path="service" element={<BusinessService />} />
           <Route path="booking" element={<BusinessBooking />} />
           <Route path="feedback" element={<BusinessFeedback />} />
-
         </Route>
-
-
-
       </Routes>
     </BrowserRouter>
   );

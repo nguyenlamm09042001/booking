@@ -25,12 +25,7 @@ class Business extends Authenticatable
     public function staff()
     {
         return $this->hasMany(Staff::class);
-    }
-    
-    public function customers()
-    {
-        return $this->hasMany(Customer::class);
-    }
+    }   
     
     public function users()
     {
