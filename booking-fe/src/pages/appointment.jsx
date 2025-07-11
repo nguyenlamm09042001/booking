@@ -11,7 +11,7 @@ function Appointment() {
       .get("http://localhost:8000/sanctum/csrf-cookie")
       .then(() => {
         // Step 2: Gọi API lấy lịch hẹn user
-        return api.get("/appointments/user");
+        return api.get("/users/appointments");
       })
       .then((res) => {
         console.log("Appointments data:", res.data.appointments);

@@ -18,6 +18,15 @@ export const errorAlert = (message) => {
   });
 };
 
+export const warningAlert = (message) => {
+  return Swal.fire({
+    icon: 'warning',
+    title: 'Cảnh báo',
+    text: message,
+    confirmButtonText: 'OK'
+  });
+};
+
 export const confirmAlert = async (title, text) => {
   const result = await Swal.fire({
     title,

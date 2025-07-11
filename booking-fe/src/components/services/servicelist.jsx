@@ -1,6 +1,6 @@
 import React from "react";
-import services from "../../data/services.json"; 
 import ServiceCard from "./servicecard"; 
+import services from "../../data/services";
 
 export default function ServiceList() {
  

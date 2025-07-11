@@ -18,6 +18,7 @@ import AdminService from './pages/admin/service';
 import AdminUser from './pages/admin/user';
 
 import BusinessDashboard from './pages/business/dashboard';
+import BusinessIncome from './pages/business/income';
 import BusinessService from './pages/business/service';
 import BusinessBooking from './pages/business/booking';
 import BusinessFeedback from './pages/business/feedback';
@@ -52,6 +53,7 @@ function App() {
         </Route>
 
         <Route path="/business" element={<BusinessLayout />}>
+          <Route path="income" element={<BusinessIncome />} />
           <Route path="dashboard" element={<BusinessDashboard />} />
           <Route path="service" element={<BusinessService />} />
           <Route path="booking" element={<BusinessBooking />} />

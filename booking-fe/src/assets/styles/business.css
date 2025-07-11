@@ -190,6 +190,16 @@
   color: white;
 }
 
+.action-button.confirm {
+  background-color: #00b894; /* xanh ngọc */
+}
+
+.action-button.complete {
+  background-color: #27ae60; /* xanh lá đậm */
+} 
+
+
+
 .action-button.edit:hover {
   background-color: #d4ac0d;
 }
@@ -451,6 +461,38 @@
   color: #333;
 }
 
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+/* Chờ xác nhận */
+.status-pending {
+  background-color: #ffc107; /* vàng */
+  color: #333;
+}
+
+/* Đã xác nhận */
+.status-confirmed {
+  background-color: #00b894; /* xanh ngọc */
+  color: white;
+}
+
+/* Đã huỷ */
+.status-cancelled {
+  background-color: #d63031; /* đỏ */
+  color: white;
+}
+
+/* Thành công */
+.status-success {
+  background-color: #27ae60; /* xanh lá đậm */
+  color: white;
+}
+
+
 /* 🔥 Pagination */
 .pagination {
   margin-top: 20px;
@@ -484,4 +526,49 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
+}
+
+.filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: end;
+  margin-bottom: 20px;
+}
+
+.filter-form label {
+  font-weight: bold;
+}
+
+.filter-select,
+.filter-input {
+  padding: 10px 14px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  min-width: 150px;
+  background-color: white;
+  font-size: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filter-select:focus,
+.filter-input:focus {
+  border-color: #6c5ce7;
+  box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.15);
+  outline: none;
+}
+
+
+.filter-button {
+  padding: 8px 16px;
+  background-color: #6c5ce7;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  }
+
+.filter-button:hover {
+  background-color: #341f97;
 }

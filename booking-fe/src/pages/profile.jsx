@@ -18,8 +18,8 @@ function Profile() {
       .catch(err => {
         console.error("Error fetching user:", err);
       });
-  },
-);
+  }, []);
+
   
   
 

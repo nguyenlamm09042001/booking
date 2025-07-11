@@ -6,14 +6,15 @@ import HairBookingForm from "../components/booking/hairbookingform";
 import HotelBookingForm from "../components/booking/hotelbookingform";
 import CarBookingForm from "../components/booking/carbookingform";
 
-function renderForm(type) {
+function renderForm(type, services) {
   switch (type) {
-    case 'hair': return <HairBookingForm />;
+    case 'hair': return <HairBookingForm services={services} />;
     case 'car': return <CarBookingForm />;
     case 'hotel': return <HotelBookingForm />;
     default: return <p>Chưa hỗ trợ form cho loại doanh nghiệp này.</p>;
   }
 }
+
 
 export default function BookingForm() {
   const { id } = useParams();
@@ -21,7 +22,7 @@ export default function BookingForm() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get(`/businesses/${id}`)
+    api.get(`/businesses/services/${id}`)
       .then(res => {
         setBusiness(res.data);
         setLoading(false);
@@ -64,7 +65,10 @@ export default function BookingForm() {
                     <h4 className="fw-semibold mb-2">Đặt lịch: {business.name}</h4>
                     <p className="text-muted small mb-4">💡 Điền thông tin để giữ chỗ và nhận ưu đãi.</p>
 
-                    {renderForm(business.type)}
+                    {business.services.length > 0
+  ? renderForm(business.services[0].type, business.services)
+  : <p>Doanh nghiệp chưa có dịch vụ nào để đặt lịch.</p>
+}
 
                     <div className="alert alert-info mt-4 small">
                       🎁 Tặng kèm <strong>gội dưỡng cao cấp</strong> khi đặt lịch hôm nay.

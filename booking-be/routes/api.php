@@ -10,34 +10,64 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 
+//
+// 🔒 AUTH ROUTES
+//
 Route::middleware('web')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
     Route::get('/user', [AuthController::class, 'user'])->middleware('auth');
 });
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/admin/appointments', [AdminController::class, 'appointments']);
-});
-
 
 Route::post('/register', [AuthController::class, 'register']);
 
-Route::get('admin/services', [ServiceController::class, 'index']);
-Route::get('admin/users', [AdminController::class, 'getusers']);
+//
+// 🔧 ADMIN ROUTES
+//
+Route::prefix('admin')->group(function () {
+    Route::get('/appointments', [AdminController::class, 'appointments']);
+    Route::get('/businesses', [AdminController::class, 'getbusinesses']);
+    Route::get('/users', [AdminController::class, 'getusers']);
+});
 
-Route::get('businesses', [BusinessController::class, 'index']);
-Route::get('businesses/{id}/appointments', [BusinessController::class, 'getAppointmentsByBusiness']);
-Route::get('/businesses/{id}', [BusinessController::class, 'show']);
-Route::get('/businesses/{business}/services', [BusinessController::class, 'getService']);
-Route::post('/businesses/{business}/services', [BusinessController::class, 'creatService']);
-Route::put('/businesses/{business}/services/{service}', [BusinessController::class, 'updateService']);
-Route::delete('/businesses/{business}/services/{service}', [BusinessController::class, 'destroyService']);
-Route::get('/businesses/{id}', [BusinessController::class, 'getFeedback']);
+//
+// 🏢 BUSINESS ROUTES (auth:sanctum optional – thêm nếu cần bảo mật)
+//
+Route::prefix('businesses')->group(function () {
+    Route::get('/services', [BusinessController::class, 'getServices']);
+    Route::get('/{id}/appointments', [BusinessController::class, 'getAppointmentsByBusiness']);
+    Route::get('/services/{id}', [BusinessController::class, 'show']);
+    Route::get('/{business}/services', [BusinessController::class, 'getService']);
+    Route::post('/{business}/services', [BusinessController::class, 'creatService']);
+    Route::put('/{business}/services/{service}', [BusinessController::class, 'updateService']);
+    Route::delete('/{business}/services/{service}', [BusinessController::class, 'destroyService']);
 
-Route::middleware('auth:sanctum')->get('/appointments/user', [UserController::class, 'getappointmentuser']);
-Route::middleware('auth:sanctum')->put('/user/profile-information', [ProfileController::class, 'apiUpdate']);
-Route::middleware('auth:sanctum')->put('/user/password', [ProfileController::class, 'apiUpdatePassword']);
-Route::middleware('auth:sanctum')->delete('/user', [ProfileController::class, 'apiDestroy']);
+    // 🔥 Feedback & Statistics
+    Route::get('/{id}/feedbacks', [BusinessController::class, 'getFeedback']);
+    Route::get('/{id}/feedbacks/today', [BusinessController::class, 'getTodayFeedbacks']);
+    Route::get('/{id}/services/total', [BusinessController::class, 'getTotalServicesByBusiness']);
+    Route::get('/{id}/appointments/today', [BusinessController::class, 'getTodayAppointments']);
+    Route::get('/{id}/income/month', [BusinessController::class, 'getIncomeThisMonth']);
+    Route::get('/{id}/income/filter', [BusinessController::class, 'filterIncome']);
+});
 
+//
+// 📅 APPOINTMENT ROUTES
+//
+Route::prefix('appointments')->group(function () {
+    Route::put('/{id}/confirm', [BusinessController::class, 'confirm']);
+    Route::put('/{id}/cancel', [BusinessController::class, 'cancel']);
+    Route::put('/{id}/complete', [BusinessController::class, 'complete']);
+});
 
-Route::post('/appointments', [AppointmentController::class,'store']);
+//
+// 👤 USER ROUTES (auth:sanctum protected)
+//
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/users/appointments', [UserController::class, 'getappointmentuser']);
+    Route::put('/user/profile-information', [ProfileController::class, 'apiUpdate']);
+    Route::put('/user/password', [ProfileController::class, 'apiUpdatePassword']);
+    Route::delete('/user', [ProfileController::class, 'apiDestroy']);
+});
+
+Route::post('/users/appointments', [UserController::class,'createAppointment']);

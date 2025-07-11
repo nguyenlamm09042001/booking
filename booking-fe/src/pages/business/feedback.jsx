@@ -1,27 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import '../../assets/styles/business.css';
-import api from '../../axios'; // file axios config
+import React, { useState, useEffect } from "react";
+import "../../assets/styles/business.css";
+import api from "../../axios"; // file axios config
 
 export default function BusinessFeedback() {
-  const [business, setBusiness] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [feedbacks, setFeedbacks] = useState([]);
 
-  // Giả sử businessId lấy từ localStorage hoặc props
-  const businessId = 1;
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const businessId = user ? user.business_id || user.id : null;
 
   useEffect(() => {
-    const fetchBusiness = async () => {
+    const fetchFeedbacks = async () => {
       try {
-        const res = await api.get(`/businesses/${businessId}`);
-        setBusiness(res.data);
+        const res = await api.get(`/businesses/${businessId}/feedbacks`);
+        setFeedbacks(res.data);
       } catch (err) {
-        console.error('Lỗi khi fetch business:', err);
+        console.error("Lỗi khi fetch feedbacks:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBusiness();
+    fetchFeedbacks();
   }, [businessId]);
 
   return (
@@ -34,26 +35,29 @@ export default function BusinessFeedback() {
           <h2>Feedback của business</h2>
           {loading ? (
             <p>Đang tải...</p>
-          ) : business && business.feedback ? (
+          ) : feedbacks.length > 0 ? (
             <table className="business-table">
               <thead>
                 <tr>
-                  <th>Tên Business</th>
+                  <th>ID</th>
+                  <th>Tên khách hàng</th>
                   <th>Feedback</th>
                   <th>Đánh giá</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>{business.name}</td>
-                  <td>{business.feedback}</td>
-                  <td>
-                    {business.rating
-                      ? '⭐️'.repeat(business.rating) +
-                        '☆'.repeat(5 - business.rating)
-                      : 'Chưa có'}
-                  </td>
-                </tr>
+                {feedbacks.map((fb) => (
+                  <tr key={fb.id}>
+                    <td>{fb.id}</td>
+                    <td>{fb.user ? fb.user.name : fb.user_name}</td>
+                    <td>{fb.comment}</td>
+                    <td>
+                      {fb.rating
+                        ? "⭐️".repeat(fb.rating) + "☆".repeat(5 - fb.rating)
+                        : "Chưa có"}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           ) : (

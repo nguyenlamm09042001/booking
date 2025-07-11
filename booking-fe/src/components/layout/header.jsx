@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../assets/styles/header.css';
 import api from '../../axios';
+import { successAlert, confirmAlert } from '../../utils/swal';
 
 export default function Header() {
   const [user, setUser] = useState(null);
@@ -48,11 +49,18 @@ export default function Header() {
   };
 
   const handleLogout = async () => {
+    const confirm = await confirmAlert('🚪 Đăng xuất', 'Bạn có chắc chắn muốn đăng xuất không?');
+    if (!confirm) return;
+    
     try {
       await api.post('/logout');
       localStorage.removeItem('user');
       setUser(null);
-      navigate('/login');
+      successAlert('✅ Đăng xuất thành công!')
+      .then(() => {
+        navigate('/login');
+      });
+    
     } catch (error) {
       console.error('Logout failed:', error);
     }

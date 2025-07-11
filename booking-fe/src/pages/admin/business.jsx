@@ -4,18 +4,14 @@ import api from '../../axios';
 
 export default function BusinessPage() {
   const [businesses, setBusinesses] = useState([]);
-  const [topOwners, setTopOwners] = useState([]);
 
   useEffect(() => {
     // 👉 Gọi API lấy danh sách doanh nghiệp
-    api.get('/businesses')
+    api.get('/admin/businesses')
       .then(res => setBusinesses(res.data))
-      .catch(err => console.error(err));
+      .catch(err => console.error('Lỗi load businesses:', err));
 
-    // 👉 Gọi API lấy top chủ sở hữu (nếu có)
-    api.get('/businesses/top-owners')
-      .then(res => setTopOwners(res.data))
-      .catch(err => console.error(err));
+
   }, []);
 
   return (
@@ -32,11 +28,11 @@ export default function BusinessPage() {
             <p>Tổng doanh nghiệp</p>
           </div>
           <div className="stat-card">
-            <h3>{businesses.filter(b => b.status === 'active').length}</h3>
+            <h3>{businesses.filter(b => b.status === 'Đang hoạt động').length}</h3>
             <p>Đang hoạt động</p>
           </div>
           <div className="stat-card">
-            <h3>{businesses.filter(b => b.status === 'pending').length}</h3>
+            <h3>{businesses.filter(b => b.status === 'Đang chờ duyệt').length}</h3>
             <p>Chờ duyệt</p>
           </div>
         </div>
@@ -74,17 +70,19 @@ export default function BusinessPage() {
               businesses.map((b, index) => (
                 <tr key={b.id}>
                   <td>{index + 1}</td>
-                  <td>{b.name}</td>
-                  <td>{b.owner_name}</td>
-                  <td>{b.email}</td>
-                  <td>{b.phone}</td>
-                  <td>{b.address}</td>
-                  <td>{b.service_count}</td>
-                  <td>{b.status}</td>
-                  <td>{b.registered_at}</td>
+                  <td>{b.name || 'Chưa cập nhật'}</td>
+                  <td>{b.user?.name || 'Chưa cập nhật'}</td>
+                  <td>{b.user?.email || 'Chưa cập nhật'}</td>
+                  <td>{b.phone || 'Chưa cập nhật'}</td>
+                  <td>{b.location || 'Chưa cập nhật'}</td>
+                  <td>{b.services ? b.services.length : 0}</td>
+                  <td>{b.status || 'Chưa cập nhật'}</td>
+                  <td>{b.created_at ? new Date(b.created_at).toLocaleDateString() : 'Chưa cập nhật'}</td>
                   <td>
                     <button className="btn-view">Xem</button>
-                    <button className="btn-approve">Duyệt</button>
+                    {b.status === 'pending' && (
+                      <button className="btn-approve">Duyệt</button>
+                    )}
                     <button className="btn-cancel">Xóa</button>
                   </td>
                 </tr>
@@ -107,34 +105,7 @@ export default function BusinessPage() {
         </ul>
       </div>
 
-      {/* 👥 Top chủ sở hữu */}
-      <div className="admin-section">
-        <h2>👥 Top chủ sở hữu</h2>
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>STT</th>
-              <th>Tên chủ sở hữu</th>
-              <th>Số doanh nghiệp</th>
-            </tr>
-          </thead>
-          <tbody>
-            {topOwners.length > 0 ? (
-              topOwners.map((o, index) => (
-                <tr key={o.id}>
-                  <td>{index + 1}</td>
-                  <td>{o.name}</td>
-                  <td>{o.business_count}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="3">Không có dữ liệu</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+    
     </div>
   );
 }

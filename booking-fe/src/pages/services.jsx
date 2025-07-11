@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import api from "../axios";
-import { useNavigate } from "react-router-dom";
 import "../assets/styles/services.css";
 
 export default function Services() {
   const [servicesData, setServicesData] = useState([]);
-
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const selectedType = queryParams.get("type");
@@ -14,14 +12,14 @@ export default function Services() {
 
   useEffect(() => {
     api
-      .get("/businesses")
+      .get("/businesses/services")
       .then((res) => setServicesData(res.data))
-      .catch((err) => console.error("Lỗi lấy dữ liệu businesses:", err));
+      .catch((err) => console.error("Lỗi lấy dữ liệu services:", err));
   }, []);
 
   // 👉 Lọc theo ?type nếu có
-  const filteredBusinesses = selectedType
-    ? servicesData.filter((b) => b.type === selectedType)
+  const filteredServices = selectedType
+    ? servicesData.filter((s) => s.type === selectedType)
     : servicesData;
 
   const handleBooking = (businessId) => {
@@ -30,21 +28,22 @@ export default function Services() {
 
   return (
     <div className="container my-5">
-      <h2>💼 Danh sách các cơ sở</h2>
+      <h2>💼 Danh sách dịch vụ</h2>
       <div>
-        {filteredBusinesses.length > 0 ? (
-          filteredBusinesses.map((business) => (
-            <div key={business.id}>
+        {filteredServices.length > 0 ? (
+          filteredServices.map((service) => (
+            <div key={service.id} className="service-card">
               <img
-                src={business.image || "https://via.placeholder.com/150"}
-                alt={business.name}
+                src={service.business?.image || "https://via.placeholder.com/150"}
+                alt={service.business?.name}
               />
-              <h3>{business.name}</h3>
-              <p>📍 {business.location}</p>
-              <p>📞 {business.phone}</p>
-              <p>✉️ {business.email}</p>
+              <h3>{service.business?.name}</h3>
+              <p>📍 {service.business?.location || "Chưa cập nhật địa chỉ"}</p>
+              <p>📞 {service.business?.phone || "Chưa có số điện thoại"}</p>
+              <p>💈 Dịch vụ: {service.name}</p>
+              <p>💰 Giá: {Number(service.price).toLocaleString()} VND</p>
               <button
-                onClick={() => handleBooking(business.id)}
+                onClick={() => handleBooking(service.business.id)}
                 className="booking-button"
               >
                 📅 Đặt lịch
@@ -53,30 +52,35 @@ export default function Services() {
           ))
         ) : (
           <p>
-            ⚠️ Không có cơ sở nào thuộc loại <strong>{selectedType}</strong>
+            ⚠️ Không có dịch vụ nào thuộc loại{" "}
+            <strong>{selectedType}</strong>
           </p>
         )}
       </div>
 
       {!selectedType && (
         <>
-          <h2>🎯 Doanh nghiệp theo loại hình</h2>
+          <h2>🎯 Dịch vụ theo loại hình</h2>
           {["hair", "nail", "spa", "massage"].map((type) => {
-            const group = servicesData.filter((b) => b.type === type);
+            const group = servicesData.filter((s) => s.type === type);
             if (group.length === 0) return null;
 
             return (
               <div key={type}>
                 <h3>• {type.toUpperCase()}</h3>
-                <div>
-                  {group.map((b) => (
-                    <div key={b.id}>
+                <div className="service-group">
+                  {group.map((service) => (
+                    <div key={service.id} className="service-card">
                       <img
-                        src={b.image || "https://via.placeholder.com/150"}
-                        alt={b.name}
+                        src={
+                          service.business?.image ||
+                          "https://via.placeholder.com/150"
+                        }
+                        alt={service.business?.name}
                       />
-                      <h4>{b.name}</h4>
-                      <p>{b.location}</p>
+                      <h4>{service.business?.name}</h4>
+                      <p>{service.business?.location}</p>
+                      <p>{service.name}</p>
                     </div>
                   ))}
                 </div>

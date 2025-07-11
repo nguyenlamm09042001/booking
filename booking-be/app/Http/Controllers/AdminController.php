@@ -16,11 +16,13 @@ class AdminController extends Controller
         return response()->json($appointments);
     }
 
-    public function businesses()
+    public function getBusinesses()
     {
-        $businesses = Business::with('services')->get();
+        $businesses = Business::with(['services', 'user:id,name,email'])->get();
+    
         return response()->json($businesses);
     }
+    
 
     public function getusers()
     {
