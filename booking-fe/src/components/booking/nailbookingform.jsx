@@ -14,22 +14,22 @@ const timeSlots = [
   "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00",
 ];
 
-export default function HairBookingForm({ services }) {
-  // ✅ Lọc các dịch vụ thuộc type 'hair'
-  const hairServices = services.filter((s) => s.type === "hair");
+export default function NailBookingForm({ services }) {
+  // ✅ Lọc dịch vụ làm nail
+  const nailServices = services.filter((s) => s.type === "nail");
 
-  // ✅ Gọi useState trước, tránh vi phạm Hook Rules
+  // ✅ Gọi useState TRƯỚC mọi điều kiện
   const [form, setForm] = useState({
     name: userName,
     phone: userPhone,
-    style: hairServices[0]?.name || "", // fallback nếu không có dịch vụ
+    style: nailServices[0]?.name || "",
     date: today,
     time: "",
   });
 
-  // ✅ Nếu không có dịch vụ 'hair', render thông báo ở return
-  if (hairServices.length === 0) {
-    return <p className="text-danger">⛔ Không tìm thấy dịch vụ làm tóc nào.</p>;
+  // ✅ Nếu không có dịch vụ thì render báo lỗi
+  if (nailServices.length === 0) {
+    return <p className="text-danger">⛔ Không tìm thấy dịch vụ nail nào.</p>;
   }
 
   const handleChange = (e) => {
@@ -50,13 +50,13 @@ export default function HairBookingForm({ services }) {
         date: form.date,
         time: form.time,
       });
-      successAlert("✅ Đặt lịch thành công!");
+      successAlert("💅 Đặt lịch nail thành công!");
       console.log(res.data);
 
       setForm({
         name: "",
         phone: "",
-        style: hairServices[0].name,
+        style: nailServices[0]?.name || "",
         date: today,
         time: "",
       });
@@ -105,7 +105,7 @@ export default function HairBookingForm({ services }) {
           onChange={handleChange}
           required
         >
-          {hairServices.map((s) => (
+          {nailServices.map((s) => (
             <option key={s.id} value={s.name}>
               {s.name}
             </option>

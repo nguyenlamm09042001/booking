@@ -18,14 +18,20 @@ export const errorAlert = (message) => {
   });
 };
 
-export const warningAlert = (message) => {
-  return Swal.fire({
+export const warningAlert = async (title, text) => {
+  const result = await Swal.fire({
+    title,
+    text,
     icon: 'warning',
-    title: 'Cảnh báo',
-    text: message,
-    confirmButtonText: 'OK'
+    showCancelButton: true,
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Huỷ',
+    reverseButtons: true,
   });
+
+  return result.isConfirmed; 
 };
+
 
 export const confirmAlert = async (title, text) => {
   const result = await Swal.fire({
@@ -37,5 +43,5 @@ export const confirmAlert = async (title, text) => {
     cancelButtonText: 'Hủy',
   });
 
-  return result.isConfirmed; // ✅ Trả về true/false
+  return result.isConfirmed; 
 };

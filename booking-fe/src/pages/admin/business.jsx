@@ -1,17 +1,76 @@
 import React, { useEffect, useState } from 'react';
 import '../../assets/styles/admin.css';
 import api from '../../axios';
+import { successAlert, errorAlert, confirmAlert } from '../../utils/swal';
 
 export default function BusinessPage() {
   const [businesses, setBusinesses] = useState([]);
+  const [selectedBusiness, setSelectedBusiness] = useState(null);
+
+  const handleViewBusiness = (business) => {
+    setSelectedBusiness(business);
+  };
+
+  const handleApproveBusiness = async (id) => {
+    const confirm = await confirmAlert("Duyệt doanh nghiệp", "Bạn có chắc chắn muốn duyệt doanh nghiệp này?");
+    if (!confirm) return;
+
+    try {
+      await api.put(`/admin/businesses/${id}/approve`);
+      setBusinesses(prev => prev.map(b => b.id === id ? { ...b, status: 'Đang hoạt động' } : b));
+      successAlert("✅ Doanh nghiệp đã được duyệt!");
+    } catch (err) {
+      console.error(err);
+      errorAlert("❌ Duyệt doanh nghiệp thất bại!");
+    }
+  };
+
+  const handlePauseBusiness = async (id) => {
+    const confirm = await confirmAlert("Tạm ngừng doanh nghiệp", "Bạn có muốn tạm ngừng doanh nghiệp này?");
+    if (!confirm) return;
+
+    try {
+      await api.put(`/admin/businesses/${id}/pause`);
+      setBusinesses(prev => prev.map(b => b.id === id ? { ...b, status: 'Đã tạm ngừng' } : b));
+      successAlert("⏸ Doanh nghiệp đã tạm ngừng!");
+    } catch (err) {
+      console.error(err);
+      errorAlert("❌ Tạm ngừng doanh nghiệp thất bại!");
+    }
+  };
+
+  const handleResumeBusiness = async (id) => {
+    const confirm = await confirmAlert("Hoạt động lại", "Bạn muốn cho doanh nghiệp này hoạt động lại?");
+    if (!confirm) return;
+
+    try {
+      await api.put(`/admin/businesses/${id}/resume`);
+      setBusinesses(prev => prev.map(b => b.id === id ? { ...b, status: 'Đang hoạt động' } : b));
+      successAlert("▶️ Doanh nghiệp đã hoạt động lại!");
+    } catch (err) {
+      console.error(err);
+      errorAlert("❌ Khôi phục doanh nghiệp thất bại!");
+    }
+  };
+
+  const handleDeleteBusiness = async (id) => {
+    const confirm = await confirmAlert("Xoá doanh nghiệp", "Bạn chắc chắn muốn xoá doanh nghiệp này?");
+    if (!confirm) return;
+
+    try {
+      await api.delete(`/admin/businesses/${id}`);
+      setBusinesses(prev => prev.filter(b => b.id !== id));
+      successAlert("🗑 Doanh nghiệp đã bị xoá!");
+    } catch (err) {
+      console.error(err);
+      errorAlert("❌ Xoá doanh nghiệp thất bại!");
+    }
+  };
 
   useEffect(() => {
-    // 👉 Gọi API lấy danh sách doanh nghiệp
     api.get('/admin/businesses')
       .then(res => setBusinesses(res.data))
       .catch(err => console.error('Lỗi load businesses:', err));
-
-
   }, []);
 
   return (
@@ -19,7 +78,6 @@ export default function BusinessPage() {
       <h1>Doanh nghiệp</h1>
       <p className="admin-subtitle">Quản lý danh sách doanh nghiệp đăng ký trên hệ thống</p>
 
-      {/* 📊 Tổng quan doanh nghiệp */}
       <div className="admin-section">
         <h2>📊 Tổng quan doanh nghiệp</h2>
         <div className="admin-stats">
@@ -38,7 +96,6 @@ export default function BusinessPage() {
         </div>
       </div>
 
-      {/* 🔔 Thông báo doanh nghiệp */}
       <div className="admin-section">
         <h2>🔔 Thông báo doanh nghiệp</h2>
         <ul>
@@ -47,7 +104,6 @@ export default function BusinessPage() {
         </ul>
       </div>
 
-      {/* 🏢 Danh sách doanh nghiệp */}
       <div className="admin-section">
         <h2>🏢 Danh sách doanh nghiệp</h2>
         <table className="admin-table">
@@ -55,13 +111,8 @@ export default function BusinessPage() {
             <tr>
               <th>STT</th>
               <th>Tên doanh nghiệp</th>
-              <th>Chủ sở hữu</th>
-              <th>Email</th>
-              <th>SĐT</th>
-              <th>Địa chỉ</th>
               <th>Số dịch vụ</th>
               <th>Trạng thái</th>
-              <th>Ngày đăng ký</th>
               <th>Hành động</th>
             </tr>
           </thead>
@@ -71,19 +122,24 @@ export default function BusinessPage() {
                 <tr key={b.id}>
                   <td>{index + 1}</td>
                   <td>{b.name || 'Chưa cập nhật'}</td>
-                  <td>{b.user?.name || 'Chưa cập nhật'}</td>
-                  <td>{b.user?.email || 'Chưa cập nhật'}</td>
-                  <td>{b.phone || 'Chưa cập nhật'}</td>
-                  <td>{b.location || 'Chưa cập nhật'}</td>
                   <td>{b.services ? b.services.length : 0}</td>
-                  <td>{b.status || 'Chưa cập nhật'}</td>
-                  <td>{b.created_at ? new Date(b.created_at).toLocaleDateString() : 'Chưa cập nhật'}</td>
                   <td>
-                    <button className="btn-view">Xem</button>
-                    {b.status === 'pending' && (
-                      <button className="btn-approve">Duyệt</button>
+                    <span className={`status-tag ${b.status === 'Đang hoạt động' ? 'active' : b.status === 'Đã tạm ngừng' ? 'paused' : 'pending'}`}>
+                      {b.status || 'Chưa cập nhật'}
+                    </span>
+                  </td>
+                  <td>
+                    <button className="action-button view" onClick={() => handleViewBusiness(b)}>👁 Xem</button>
+                    {b.status === 'Đang chờ duyệt' && (
+                      <button className="action-button approve" onClick={() => handleApproveBusiness(b.id)}>✅ Duyệt</button>
                     )}
-                    <button className="btn-cancel">Xóa</button>
+                    {b.status === 'Đang hoạt động' && (
+                      <button className="action-button pause" onClick={() => handlePauseBusiness(b.id)}>⏸ Tạm ngừng</button>
+                    )}
+                    {b.status === 'Đã tạm ngừng' && (
+                      <button className="action-button resume" onClick={() => handleResumeBusiness(b.id)}>▶️ Hoạt động lại</button>
+                    )}
+                    <button className="action-button delete" onClick={() => handleDeleteBusiness(b.id)}>🗑 Xoá</button>
                   </td>
                 </tr>
               ))
@@ -96,7 +152,24 @@ export default function BusinessPage() {
         </table>
       </div>
 
-      {/* 📝 Cập nhật gần đây */}
+      {/* 🔍 Modal chi tiết doanh nghiệp */}
+      {selectedBusiness && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button className="close-button" onClick={() => setSelectedBusiness(null)}>×</button>
+            <h2>Chi tiết doanh nghiệp</h2>
+            <p><strong>Tên:</strong> {selectedBusiness.name}</p>
+            <p><strong>Chủ sở hữu:</strong> {selectedBusiness.user?.name || 'Chưa cập nhật'}</p>
+            <p><strong>Email:</strong> {selectedBusiness.user?.email || 'Chưa cập nhật'}</p>
+            <p><strong>SĐT:</strong> {selectedBusiness.phone || 'Chưa cập nhật'}</p>
+            <p><strong>Địa chỉ:</strong> {selectedBusiness.location || 'Chưa cập nhật'}</p>
+            <p><strong>Số dịch vụ:</strong> {selectedBusiness.services?.length || 0}</p>
+            <p><strong>Trạng thái:</strong> {selectedBusiness.status}</p>
+            <p><strong>Ngày tạo:</strong> {new Date(selectedBusiness.created_at).toLocaleDateString()}</p>
+          </div>
+        </div>
+      )}
+
       <div className="admin-section">
         <h2>📝 Cập nhật gần đây</h2>
         <ul>
@@ -104,8 +177,6 @@ export default function BusinessPage() {
           <li>2025-06-28 – Cập nhật UI trang Doanh nghiệp.</li>
         </ul>
       </div>
-
-    
     </div>
   );
 }

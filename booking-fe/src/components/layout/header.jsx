@@ -49,18 +49,16 @@ export default function Header() {
   };
 
   const handleLogout = async () => {
-    const confirm = await confirmAlert('🚪 Đăng xuất', 'Bạn có chắc chắn muốn đăng xuất không?');
-    if (!confirm) return;
-    
+    const confirmed = await confirmAlert('🚪 Đăng xuất', 'Bạn có chắc chắn muốn đăng xuất không?');
+    if (!confirmed) return;
+
     try {
       await api.post('/logout');
       localStorage.removeItem('user');
       setUser(null);
-      successAlert('✅ Đăng xuất thành công!')
-      .then(() => {
+      successAlert('✅ Đăng xuất thành công!').then(() => {
         navigate('/login');
       });
-    
     } catch (error) {
       console.error('Logout failed:', error);
     }
@@ -75,9 +73,7 @@ export default function Header() {
       <nav className="nav-container">
         <div className="search-container">
           {!showSearch && (
-            <button onClick={toggleSearch} className="search-icon">
-              🔍
-            </button>
+            <button onClick={toggleSearch} className="search-icon">🔍</button>
           )}
           {showSearch && (
             <input
@@ -97,7 +93,10 @@ export default function Header() {
             )}
 
             {role !== 'business' && (
-              <Link to="/appointments" className="nav-link">Lịch hẹn</Link>
+              <>
+                <Link to="/" className="nav-link">Trang chủ</Link>
+                <Link to="/appointments" className="nav-link">Lịch hẹn</Link>
+              </>
             )}
 
             <div className="user-actions">

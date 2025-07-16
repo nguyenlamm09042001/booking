@@ -26,9 +26,16 @@ Route::post('/register', [AuthController::class, 'register']);
 //
 Route::prefix('admin')->group(function () {
     Route::get('/appointments', [AdminController::class, 'appointments']);
-    Route::get('/businesses', [AdminController::class, 'getbusinesses']);
-    Route::get('/users', [AdminController::class, 'getusers']);
+    Route::get('/businesses', [AdminController::class, 'getBusinesses']);
+    Route::get('/users', [AdminController::class, 'getUsers']);
+    Route::patch('/users/{id}/status', [AdminController::class, 'updateStatus']);
+    Route::put('/businesses/{id}/approve', [AdminController::class, 'approveBusiness']);
+    Route::put('/businesses/{id}/pause', [AdminController::class, 'pauseBusiness']);
+    Route::put('/businesses/{id}/resume', [AdminController::class, 'resumeBusiness']);
+    Route::delete('/businesses/{id}', [AdminController::class, 'deleteBusiness']);
+    Route::get('/businesses/{id}', [AdminController::class, 'showBusiness']); // 👁 optional nếu cần
 });
+
 
 //
 // 🏢 BUSINESS ROUTES (auth:sanctum optional – thêm nếu cần bảo mật)
@@ -65,9 +72,12 @@ Route::prefix('appointments')->group(function () {
 //
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users/appointments', [UserController::class, 'getappointmentuser']);
+    Route::post('/users/feedbacks', [UserController::class,'createFeedback']); // 🛡 Đưa vào đây
     Route::put('/user/profile-information', [ProfileController::class, 'apiUpdate']);
     Route::put('/user/password', [ProfileController::class, 'apiUpdatePassword']);
     Route::delete('/user', [ProfileController::class, 'apiDestroy']);
 });
 
-Route::post('/users/appointments', [UserController::class,'createAppointment']);
+Route::get('/user/nearby', [UserController::class, 'getNearbyBusinesses']);
+
+Route::get('/user/random-service', [UserController::class, 'random']);

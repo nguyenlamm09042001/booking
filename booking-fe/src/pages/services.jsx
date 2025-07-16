@@ -22,9 +22,10 @@ export default function Services() {
     ? servicesData.filter((s) => s.type === selectedType)
     : servicesData;
 
-  const handleBooking = (businessId) => {
-    navigate(`/booking/${businessId}`);
-  };
+    const handleBooking = (businessId, type) => {
+      navigate(`/booking/${businessId}?type=${type}`);
+    };
+    
 
   return (
     <div className="container my-5">
@@ -43,11 +44,12 @@ export default function Services() {
               <p>💈 Dịch vụ: {service.name}</p>
               <p>💰 Giá: {Number(service.price).toLocaleString()} VND</p>
               <button
-                onClick={() => handleBooking(service.business.id)}
+                onClick={() => handleBooking(service.business.id, service.type)}
                 className="booking-button"
               >
                 📅 Đặt lịch
               </button>
+
             </div>
           ))
         ) : (

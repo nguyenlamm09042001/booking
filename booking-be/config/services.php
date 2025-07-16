@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'opencage' => [
+        'key' => env('OPENCAGE_API_KEY'),
+        'url' => env('OPENCAGE_API_URL'),
+        'language' => env('OPENCAGE_API_LANGUAGE'),
+        'country' => env('OPENCAGE_API_COUNTRY'),
+        'limit' => env('OPENCAGE_API_LIMIT'),
+    ],
+
+
 ];
