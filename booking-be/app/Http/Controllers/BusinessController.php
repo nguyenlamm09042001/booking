@@ -10,14 +10,20 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Carbon\Carbon;
 use App\Models\Feedback;
+use App\Models\Staff;
+use App\Models\ServiceStaff;
+use Illuminate\Support\Facades\Auth;
 
 class BusinessController extends Controller
 {
-    public function getServices()
+  
+    public function getService(Business $business)
     {
-        $services = Service::with(['business.user'])->get();
+        $services = $business->services()->orderBy('created_at', 'desc')->get();
         return response()->json($services);
     }
+    
+    
 
 
 
@@ -37,11 +43,7 @@ class BusinessController extends Controller
         return response()->json($appointments);
     }
 
-    public function getService(Business $business)
-    {
-        $services = $business->services()->orderBy('created_at', 'desc')->get();
-        return response()->json($services);
-    }
+   
 
     public function creatService(Request $request, Business $business)
     {
@@ -107,11 +109,11 @@ class BusinessController extends Controller
         $feedbacks = Feedback::where('business_id', $id)
             ->with('user')
             ->get();
-    
+
         return response()->json($feedbacks);
     }
-    
-    
+
+
 
     public function getTodayFeedbacks($id)
     {
@@ -175,39 +177,39 @@ class BusinessController extends Controller
 
 
     public function filterIncome(Request $request, $id)
-{
-    $query = Appointment::where('appointments.business_id', $id)
-        ->where('appointments.status', 'Thành công') // 🔥 Thêm điều kiện status
-        ->join('services', 'appointments.service_id', '=', 'services.id');
+    {
+        $query = Appointment::where('appointments.business_id', $id)
+            ->where('appointments.status', 'Thành công') // 🔥 Thêm điều kiện status
+            ->join('services', 'appointments.service_id', '=', 'services.id');
 
-    // 🔥 Filter theo ngày
-    if ($request->date) {
-        $query->whereDate('appointments.date', $request->date);
+        // 🔥 Filter theo ngày
+        if ($request->date) {
+            $query->whereDate('appointments.date', $request->date);
+        }
+
+        // 🔥 Filter theo tháng năm
+        if ($request->month && $request->year) {
+            $query->whereMonth('appointments.date', $request->month)
+                ->whereYear('appointments.date', $request->year);
+        }
+
+        // 🔥 Filter theo khoảng thời gian
+        if ($request->start_date && $request->end_date) {
+            $query->whereBetween('appointments.date', [$request->start_date, $request->end_date]);
+        }
+
+        $appointments = $query->select(
+            'appointments.*',
+            'services.price as service_price'
+        )->with(['user', 'service'])->get();
+
+        $total = $appointments->sum('service_price');
+
+        return response()->json([
+            'total' => $total,
+            'appointments' => $appointments
+        ]);
     }
-
-    // 🔥 Filter theo tháng năm
-    if ($request->month && $request->year) {
-        $query->whereMonth('appointments.date', $request->month)
-            ->whereYear('appointments.date', $request->year);
-    }
-
-    // 🔥 Filter theo khoảng thời gian
-    if ($request->start_date && $request->end_date) {
-        $query->whereBetween('appointments.date', [$request->start_date, $request->end_date]);
-    }
-
-    $appointments = $query->select(
-        'appointments.*',
-        'services.price as service_price'
-    )->with(['user', 'service'])->get();
-
-    $total = $appointments->sum('service_price');
-
-    return response()->json([
-        'total' => $total,
-        'appointments' => $appointments
-    ]);
-}
 
 
     public function confirm($id)
@@ -235,5 +237,31 @@ class BusinessController extends Controller
         $appointment->save();
 
         return response()->json(['message' => 'Appointment completed successfully.']);
+    }
+
+    public function latestServices($businessId)
+    {
+        $services = Service::where('business_id', $businessId)
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+
+        return response()->json(['services' => $services]);
+    }
+
+    public function setupStatus()
+    {
+        $businessId = Auth::user()->id;
+    
+        $hasServices = Service::where('business_id', $businessId)->exists();
+        $hasStaff = Staff::where('business_id', $businessId)->exists();
+        $linkedService = ServiceStaff::where('business_id', $businessId)->exists();
+    
+        return response()->json([
+            'hasServices' => $hasServices,
+            'hasStaff' => $hasStaff,
+            'hasLink' => $linkedService,
+            'ready' => $hasServices && $hasStaff && $linkedService
+        ]);
     }
 }

@@ -18,7 +18,7 @@ export default function BusinessIncome() {
   });
 
   const user = JSON.parse(localStorage.getItem("user"));
-  const businessId = user ? user.business_id || user.id : null;
+  const businessId = user.business_id;
 
   useEffect(() => {
     // 🛠 Gọi API mặc định khi load trang (hôm nay)

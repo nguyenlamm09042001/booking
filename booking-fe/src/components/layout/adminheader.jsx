@@ -3,19 +3,30 @@ import '../../assets/styles/admin.css';
 import axios from 'axios';
 import api from '../../axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { successAlert, errorAlert, confirmAlert } from '../../utils/swal'; 
 
 export default function AdminHeader() {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
+    // ✅ Confirm trước khi logout
+    const confirm = await confirmAlert('🚪 Đăng xuất', 'Bạn có chắc chắn muốn đăng xuất không?');
+    if (!confirm) return;
+
     try {
       await axios.get('http://localhost:8000/sanctum/csrf-cookie', {
         withCredentials: true,
       });
       await api.post('/logout');
-      navigate('/login');
+
+      // ✅ Hiển thị success alert trước khi redirect
+      successAlert('✅ Đăng xuất thành công!').then(() => {
+        navigate('/login');
+      });
+
     } catch (error) {
       console.error('Logout failed:', error);
+      errorAlert('❌ Đăng xuất thất bại. Vui lòng thử lại.');
     }
   };
 

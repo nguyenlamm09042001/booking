@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../assets/styles/bookingform.css";
 import api from "../../axios";
-import { successAlert, errorAlert } from "../../utils/swal";
+import { successAlert, errorAlert, confirmAlert } from "../../utils/swal";
 
 const today = new Date().toISOString().split("T")[0];
 const user = JSON.parse(localStorage.getItem("user"));
@@ -42,21 +42,33 @@ export default function HairBookingForm({ services }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    const { name, phone, style, date, time } = form;
+  
+    // ✅ Xác nhận trước khi gửi
+    const confirmed = await confirmAlert(
+      "📋 Xác nhận đặt lịch",
+      `👤 Họ tên: ${name}\n📞 SĐT: ${phone}\n💅 Dịch vụ: ${style}\n📅 Ngày: ${date}\n⏰ Giờ: ${time}`
+    );
+  
+    if (!confirmed) return;
+  
     try {
       const res = await api.post("/users/appointments", {
-        name: form.name,
-        phone: form.phone,
-        style: form.style,
-        date: form.date,
-        time: form.time,
+        name,
+        phone,
+        style,
+        date,
+        time,
       });
-      successAlert("✅ Đặt lịch thành công!");
+  
+      successAlert("💅 Đặt lịch thành công!");
       console.log(res.data);
-
+  
       setForm({
         name: "",
         phone: "",
-        style: hairServices[0].name,
+        style: hairServices[0]?.name || "",
         date: today,
         time: "",
       });

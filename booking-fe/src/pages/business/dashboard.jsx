@@ -9,9 +9,10 @@ export default function BusinessDashboard() {
   const [todayFeedbacks, setTodayFeedbacks] = useState([]);
   const [totalTodayFeedbacks, setTotalTodayFeedbacks] = useState(0);
   const [monthlyIncome, setMonthlyIncome] = useState(0);
+  const [latestServices, setLatestServices] = useState([]);
 
   const user = JSON.parse(localStorage.getItem("user"));
-  const businessId = user ? user.business_id || user.id : null;
+  const businessId = user.business_id;
 
   useEffect(() => {
     if (!businessId) return;
@@ -58,6 +59,51 @@ export default function BusinessDashboard() {
         console.error("Lỗi lấy doanh thu tháng:", err);
       });
 
+    // 🔥 Lấy 3 dịch vụ mới nhất
+    api
+      .get(`/businesses/${businessId}/services/latest`)
+      .then((res) => {
+        setLatestServices(res.data.services);
+      })
+      .catch((err) => {
+        console.error("Lỗi lấy dịch vụ mới nhất:", err);
+      });
+
+    // 🔥 Kiểm tra đã setup xong chưa
+    api
+      .get("/businesses/setup-status")
+      .then((res) => {
+        const { hasServices, hasStaff, hasLink, ready } = res.data;
+        if (!ready) {
+          let html = `<ul style="text-align: left">`;
+          html += `<li>${hasServices ? "✅" : "❌"} Có dịch vụ</li>`;
+          html += `<li>${hasStaff ? "✅" : "❌"} Có nhân viên</li>`;
+          html += `<li>${
+            hasLink ? "✅" : "❌"
+          } Đã gán nhân viên cho dịch vụ</li>`;
+          html += `</ul>`;
+
+          import("sweetalert2").then(({ default: Swal }) => {
+            Swal.fire({
+              icon: "warning",
+              title: "⚠️ Cần hoàn tất cấu hình",
+              html,
+              showCancelButton: true,
+              confirmButtonText: "🔧 Cấu hình ngay",
+              cancelButtonText: "Để sau",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = "/business/service";
+              }
+              // Nếu muốn làm gì đó khi người ta huỷ thì xử lý thêm ở đây
+            });
+          });
+          
+        }
+      })
+      .catch((err) => {
+        console.error("Lỗi khi kiểm tra setup-status:", err);
+      });
   }, [businessId]);
 
   return (
@@ -77,8 +123,13 @@ export default function BusinessDashboard() {
         {/* 🔥 Thống kê nhanh */}
         <div className="business-stats">
           <div className="stat-card stat-purple">
-          <h3>{Number(monthlyIncome).toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}</h3>
-          <p>💰 Doanh thu tháng này</p>
+            <h3>
+              {Number(monthlyIncome).toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              })}
+            </h3>
+            <p>💰 Doanh thu tháng này</p>
           </div>
           <div className="stat-card stat-blue">
             <h3>{totalServices}</h3>
@@ -106,16 +157,21 @@ export default function BusinessDashboard() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Cắt tóc nam</td>
-                <td>100.000đ</td>
-                <td>01/07/2025</td>
-              </tr>
-              <tr>
-                <td>Gội đầu dưỡng sinh</td>
-                <td>150.000đ</td>
-                <td>30/06/2025</td>
-              </tr>
+              {latestServices.length > 0 ? (
+                latestServices.map((s) => (
+                  <tr key={s.id}>
+                    <td>{s.name}</td>
+                    <td>{Number(s.price).toLocaleString("vi-VN")}đ</td>
+                    <td>
+                      {new Date(s.created_at).toLocaleDateString("vi-VN")}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3">Chưa có dịch vụ nào</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </section>
@@ -159,7 +215,11 @@ export default function BusinessDashboard() {
                 todayFeedbacks.map((fb) => (
                   <tr key={fb.id}>
                     <td>{fb.user?.name || "Chưa có tên"}</td>
-                    <td>{fb.rating? '⭐️'.repeat(fb.rating) + '☆'.repeat(5 - fb.rating): 'Chưa có rating'}</td>                    
+                    <td>
+                      {fb.rating
+                        ? "⭐️".repeat(fb.rating) + "☆".repeat(5 - fb.rating)
+                        : "Chưa có rating"}
+                    </td>
                     <td>{fb.comment || "Chưa có feedback"}</td>
                   </tr>
                 ))

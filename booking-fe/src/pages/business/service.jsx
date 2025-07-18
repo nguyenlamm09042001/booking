@@ -10,6 +10,9 @@ export default function BusinessServices() {
   const [isEditing, setIsEditing] = useState(false);
   const [editServiceId, setEditServiceId] = useState(null);
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const businessId = user.business_id;
+
   const [newService, setNewService] = useState({
     name: "",
     price: "",
@@ -17,8 +20,6 @@ export default function BusinessServices() {
     duration: "",
   });
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  const businessId = user?.business_id;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

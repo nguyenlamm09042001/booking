@@ -40,23 +40,35 @@ Route::prefix('admin')->group(function () {
 //
 // 🏢 BUSINESS ROUTES (auth:sanctum optional – thêm nếu cần bảo mật)
 //
+
 Route::prefix('businesses')->group(function () {
-    Route::get('/services', [BusinessController::class, 'getServices']);
-    Route::get('/{id}/appointments', [BusinessController::class, 'getAppointmentsByBusiness']);
-    Route::get('/services/{id}', [BusinessController::class, 'show']);
+    Route::get('/user', [AuthController::class, 'user'])->middleware('auth');
     Route::get('/{business}/services', [BusinessController::class, 'getService']);
+
+    // 🔹 Quản lý dịch vụ
+    Route::get('/services/{id}', [BusinessController::class, 'show']); // Lấy chi tiết 1 dịch vụ
+    Route::get('/{id}/services/total', [BusinessController::class, 'getTotalServicesByBusiness']); // Tổng dịch vụ
+    Route::get('/{id}/services/latest', [BusinessController::class, 'latestServices']); // 3 dịch vụ mới nhất
     Route::post('/{business}/services', [BusinessController::class, 'creatService']);
     Route::put('/{business}/services/{service}', [BusinessController::class, 'updateService']);
     Route::delete('/{business}/services/{service}', [BusinessController::class, 'destroyService']);
 
-    // 🔥 Feedback & Statistics
+    // 🔹 Lịch hẹn
+    Route::get('/{id}/appointments', [BusinessController::class, 'getAppointmentsByBusiness']);
+    Route::get('/{id}/appointments/today', [BusinessController::class, 'getTodayAppointments']);
+
+    // 🔹 Feedback
     Route::get('/{id}/feedbacks', [BusinessController::class, 'getFeedback']);
     Route::get('/{id}/feedbacks/today', [BusinessController::class, 'getTodayFeedbacks']);
-    Route::get('/{id}/services/total', [BusinessController::class, 'getTotalServicesByBusiness']);
-    Route::get('/{id}/appointments/today', [BusinessController::class, 'getTodayAppointments']);
+
+    // 🔹 Doanh thu
     Route::get('/{id}/income/month', [BusinessController::class, 'getIncomeThisMonth']);
     Route::get('/{id}/income/filter', [BusinessController::class, 'filterIncome']);
+
+    // 🔹 Trạng thái cấu hình
+    Route::get('/setup-status', [BusinessController::class, 'setupStatus'])->middleware('auth:sanctum');
 });
+
 
 //
 // 📅 APPOINTMENT ROUTES
@@ -78,6 +90,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/user', [ProfileController::class, 'apiDestroy']);
 });
 
+Route::post('/users/appointments', [UserController::class, 'createAppointment']);
+
 Route::get('/user/nearby', [UserController::class, 'getNearbyBusinesses']);
 
 Route::get('/user/random-service', [UserController::class, 'random']);
+Route::get('/user/services', [UserController::class, 'getServices']); // Without middleware
+
+Route::get('/user/business', [UserController::class, 'getBusinessByUser']);

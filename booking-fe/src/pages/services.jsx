@@ -11,8 +11,10 @@ export default function Services() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("👉 Gọi đến:", `${api.defaults.baseURL}/user/services`);
+
     api
-      .get("/businesses/services")
+      .get("/user/services")
       .then((res) => setServicesData(res.data))
       .catch((err) => console.error("Lỗi lấy dữ liệu services:", err));
   }, []);

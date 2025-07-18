@@ -8,8 +8,8 @@ export default function BusinessFeedback() {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  const businessId = user ? user.business_id || user.id : null;
-
+  const businessId = user.business_id;
+  
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {

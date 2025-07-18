@@ -14,6 +14,30 @@ use App\Models\Business;
 class UserController extends Controller
 {
 
+    public function getBusinessByUser(Request $request)
+{
+    $userId = $request->user()->id; // nếu dùng sanctum auth
+    // hoặc nếu chưa login thì dùng:
+    // $userId = $request->query('user_id');
+
+    $business = Business::where('user_id', $userId)->first();
+
+    if (!$business) {
+        return response()->json(['message' => 'Không tìm thấy business'], 404);
+    }
+
+    return response()->json([
+        'business_id' => $business->id,
+        'business' => $business
+    ]);
+}
+
+    public function getServices()
+    {
+        $services = Service::with(['business.user'])->get();
+        return response()->json($services);
+    }
+
     public function getappointmentuser()
     {
         try {
