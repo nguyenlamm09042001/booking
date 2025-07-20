@@ -71,7 +71,7 @@ export default function BusinessDashboard() {
 
     // 🔥 Kiểm tra đã setup xong chưa
     api
-      .get("/businesses/setup-status")
+      .get(`/businesses/${businessId}/setup-status`)      
       .then((res) => {
         const { hasServices, hasStaff, hasLink, ready } = res.data;
         if (!ready) {

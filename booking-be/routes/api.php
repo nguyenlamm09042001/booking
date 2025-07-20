@@ -53,9 +53,17 @@ Route::prefix('businesses')->group(function () {
     Route::put('/{business}/services/{service}', [BusinessController::class, 'updateService']);
     Route::delete('/{business}/services/{service}', [BusinessController::class, 'destroyService']);
 
+    Route::get('/{business}/assignments', [BusinessController::class, 'getAssignments']);
+    Route::get('/{business}/staffs', [BusinessController::class, 'getStaffs']);
+    Route::post('/{business}/staffs', [BusinessController::class, 'createStaffs']);
+    Route::put('/{business}/staffs/{staff}', [BusinessController::class, 'updateStaff']);
+    Route::delete('/{business}/staffs/{staff}', [BusinessController::class, 'destroyStaff']);
+
     // 🔹 Lịch hẹn
     Route::get('/{id}/appointments', [BusinessController::class, 'getAppointmentsByBusiness']);
     Route::get('/{id}/appointments/today', [BusinessController::class, 'getTodayAppointments']);
+    Route::put('/assignments/{appointment}', [BusinessController::class, 'updateAssignments']);
+    Route::delete('/assignments/{appointment}', [BusinessController::class, 'destroyAssignments']);
 
     // 🔹 Feedback
     Route::get('/{id}/feedbacks', [BusinessController::class, 'getFeedback']);
@@ -66,7 +74,7 @@ Route::prefix('businesses')->group(function () {
     Route::get('/{id}/income/filter', [BusinessController::class, 'filterIncome']);
 
     // 🔹 Trạng thái cấu hình
-    Route::get('/setup-status', [BusinessController::class, 'setupStatus'])->middleware('auth:sanctum');
+    Route::get('/{id}/setup-status', [BusinessController::class, 'setupStatus']);
 });
 
 

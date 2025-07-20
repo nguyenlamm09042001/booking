@@ -8,6 +8,8 @@ class ServiceStaff extends Model
 {
     protected $table = 'service_staff';
 
+    public $timestamps = true; // <-- Laravel sẽ tự insert created_at và updated_at
+
     protected $fillable = [
         'business_id',
         'service_id',

@@ -9,7 +9,7 @@ class Staff extends Model
 {
     use HasFactory;
 
-    protected $guarded = [ 'business_id', 'name', 'email', 'phone', 'avatar', 'created_at', 'updated_at'];
+    protected $fillable = ['business_id', 'name', 'email', 'phone', 'avatar'];
 
 
     public function business()

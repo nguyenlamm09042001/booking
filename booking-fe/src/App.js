@@ -22,10 +22,14 @@ import BusinessIncome from './pages/business/income';
 import BusinessService from './pages/business/service';
 import BusinessBooking from './pages/business/booking';
 import BusinessFeedback from './pages/business/feedback';
+import AssignStaff from './pages/business/assignstaff';
+
+import StaffDashboard from './pages/staff/dashboard';
 
 import UserLayout from './layouts/user';
 import AdminLayout from './layouts/admin';
 import BusinessLayout from './layouts/business';
+import StaffLayout from './layouts/staff';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -58,7 +62,15 @@ function App() {
           <Route path="service" element={<BusinessService />} />
           <Route path="booking" element={<BusinessBooking />} />
           <Route path="feedback" element={<BusinessFeedback />} />
+          <Route path="assignstaff" element={<AssignStaff />} />
         </Route>
+        
+        <Route path="/staff" element={<StaffLayout />}>
+          <Route path="dashboard" element={<StaffDashboard />} />
+          {/* <Route path="schedule" element={<StaffService />} />
+          <Route path="tasks" element={<StaffBooking />} /> */}
+        </Route>
+
       </Routes>
     </BrowserRouter>
   );

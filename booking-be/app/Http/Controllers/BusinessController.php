@@ -13,17 +13,35 @@ use App\Models\Feedback;
 use App\Models\Staff;
 use App\Models\ServiceStaff;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class BusinessController extends Controller
 {
-  
+    public function getStaffs($businessId)
+    {
+        $business = Business::findOrFail($businessId);
+
+        $staffs = $business->staffs()
+            ->leftJoin('service_staff', 'staff.id', '=', 'service_staff.staff_id')
+            ->leftJoin('services', 'service_staff.service_id', '=', 'services.id')
+            ->select(
+                'staff.*',
+                'services.name as service_name',
+                'service_staff.service_id'
+            )
+            ->get();
+
+        return response()->json($staffs);
+    }
+
+
     public function getService(Business $business)
     {
         $services = $business->services()->orderBy('created_at', 'desc')->get();
         return response()->json($services);
     }
-    
-    
+
+
 
 
 
@@ -43,7 +61,7 @@ class BusinessController extends Controller
         return response()->json($appointments);
     }
 
-   
+
 
     public function creatService(Request $request, Business $business)
     {
@@ -249,19 +267,153 @@ class BusinessController extends Controller
         return response()->json(['services' => $services]);
     }
 
-    public function setupStatus()
+    public function setupStatus($id)
     {
-        $businessId = Auth::user()->id;
-    
-        $hasServices = Service::where('business_id', $businessId)->exists();
-        $hasStaff = Staff::where('business_id', $businessId)->exists();
-        $linkedService = ServiceStaff::where('business_id', $businessId)->exists();
-    
+        $hasServices = Service::where('business_id', $id)->exists();
+        $hasStaff = Staff::where('business_id', $id)->exists();
+        $linkedService = ServiceStaff::where('business_id', $id)->exists();
+
         return response()->json([
             'hasServices' => $hasServices,
             'hasStaff' => $hasStaff,
             'hasLink' => $linkedService,
-            'ready' => $hasServices && $hasStaff && $linkedService
+            'ready' => $hasServices && $hasStaff && $linkedService,
         ]);
     }
+
+    public function createStaffs(Request $request)
+    {
+        $validated = $request->validate([
+            'business_id' => 'required|exists:businesses,id',
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255|unique:users,email',
+            'phone' => 'nullable|string|max:255',
+            'password' => 'required|string|min:6',
+            'service_id' => 'nullable|exists:services,id',
+        ]);
+    
+        // 🔹 Tạo tài khoản user cho nhân viên
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'password' => Hash::make($validated['password']),
+            'role' => 'staff', // nếu có phân quyền
+        ]);
+    
+        // 🔹 Tạo nhân viên gắn với business
+        $staff = Staff::create([
+            'business_id' => $validated['business_id'],
+            'name' => $validated['name'],
+            'email' => $validated['email'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+        ]);
+    
+        // 🔹 Gán dịch vụ nếu có
+        if (!empty($validated['service_id'])) {
+            ServiceStaff::create([
+                'business_id' => $validated['business_id'],
+                'staff_id' => $staff->id,
+                'service_id' => $validated['service_id'],
+            ]);
+        }
+    
+        return response()->json([
+            'message' => 'Tạo nhân viên thành công',
+            'staff' => $staff,
+            'user' => $user,
+        ], 201);
+    }
+
+    public function updateStaff(Request $request, Business $business, Staff $staff)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:255',
+            'service_id' => 'nullable|exists:services,id',
+        ]);
+
+        // Cập nhật thông tin nhân viên
+        $staff->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+        ]);
+
+        // Nếu có chọn dịch vụ → cập nhật phân công (nếu bé muốn logic riêng thì có thể xử lý thêm)
+        if (!empty($validated['service_id'])) {
+            // Gán lại dịch vụ (nếu bé dùng ServiceStaff table)
+            \App\Models\ServiceStaff::updateOrCreate(
+                [
+                    'staff_id' => $staff->id,
+                    'business_id' => $business->id,
+                ],
+                [
+                    'service_id' => $validated['service_id'],
+                ]
+            );
+        }
+
+        return response()->json(['message' => 'Cập nhật nhân viên thành công']);
+    }
+
+    public function destroyStaff(Business $business, Staff $staff)
+    {
+        // Optional: kiểm tra staff này có thuộc business không
+        if ($staff->business_id !== $business->id) {
+            return response()->json(['message' => 'Nhân viên không thuộc cơ sở này'], 403);
+        }
+
+        // Xoá phân công dịch vụ nếu có
+        \App\Models\ServiceStaff::where('staff_id', $staff->id)->delete();
+
+        // Xoá nhân viên
+        $staff->delete();
+
+        return response()->json(['message' => 'Đã xoá nhân viên']);
+    }
+
+    public function getAssignments($businessId)
+{
+    $data = DB::table('appointments')
+        ->leftJoin('staff', 'appointments.staff_id', '=', 'staff.id')
+        ->leftJoin('services', 'appointments.service_id', '=', 'services.id')
+        ->leftJoin('users', 'appointments.user_id', '=', 'users.id')
+        ->where('appointments.business_id', $businessId)
+        ->select(
+            'appointments.id',
+            'appointments.date',
+            'appointments.time_start',
+            'staff.name as staff_name',
+            'services.name as service_name',
+            'users.name as user_name',
+            'users.phone as user_phone'
+        )
+        ->orderByDesc('appointments.date')
+        ->get();
+
+    return response()->json($data);
+}
+
+public function updateAssignments(Request $request, Appointment $appointment)
+{
+    $validated = $request->validate([
+        'date' => 'required|date',
+        'time_start' => 'required',
+        'staff_id' => 'required|exists:staff,id',
+        'service_id' => 'required|exists:services,id',
+    ]);
+
+    $appointment->update($validated);
+
+    return response()->json(['message' => 'Cập nhật lịch hẹn thành công']);
+}
+
+public function destroyAssignments(Appointment $appointment)
+{
+    $appointment->delete();
+    return response()->json(['message' => 'Đã xoá lịch hẹn']);
+}
+
 }

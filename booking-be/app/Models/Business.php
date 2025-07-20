@@ -27,7 +27,7 @@ class Business extends Model
         return $this->hasMany(Appointment::class);
     }
 
-    public function staff()
+    public function staffs()
     {
         return $this->hasMany(Staff::class);
     }
